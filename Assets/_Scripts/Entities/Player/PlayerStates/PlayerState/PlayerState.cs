@@ -7,6 +7,7 @@ public class PlayerState : State<PlayerState>
     protected GameInput gameInput;
     public bool canRotate=true;
     public bool canJump=true;
+    public bool canAttack=true;
     public PlayerState(PlayerStateMachine parent, string stateName,PlayerController player) : base(parent, stateName)
     {
         this.player=player;

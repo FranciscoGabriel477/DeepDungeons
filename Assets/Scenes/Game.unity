@@ -189,6 +189,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 567906324}
     - target: {fileID: 4094020094891478251, guid: 0f743684e97d39447b60b19c9fd42c44, type: 3}
+      propertyPath: baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 20069773bb223d748b61c44ff192f497, type: 2}
+    - target: {fileID: 4094020094891478251, guid: 0f743684e97d39447b60b19c9fd42c44, type: 3}
       propertyPath: boxSize.x
       value: 2
       objectReference: {fileID: 0}
@@ -363,6 +367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 567906327}
   - component: {fileID: 567906325}
+  - component: {fileID: 567906328}
   m_Layer: 9
   m_Name: Sword
   m_TagString: Untagged
@@ -382,13 +387,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84ea83f3ef06f0044a817fede141bbbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeapon
-  boxSize: {x: 2, y: 1.2, z: 1}
-  debugColor: {r: 0, g: 1, b: 0, a: 1}
-  centerOffSet: {x: 0.5, y: 0.1, z: 0}
-  enemyLayer:
+  weaponCollider: {fileID: 567906328}
+  weaponInfo: {fileID: 11400000, guid: dfec84d4545f2574e8eda1c889dc5c07, type: 2}
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  targetLayer:
     serializedVersion: 2
     m_Bits: 256
-  weaponInfo: {fileID: 11400000, guid: dfec84d4545f2574e8eda1c889dc5c07, type: 2}
 --- !u!4 &567906327
 Transform:
   m_ObjectHideFlags: 0
@@ -404,6 +421,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 150993010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &567906328
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567906324}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.5084193, y: 0.09244013}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2.0168386, y: 1.1848803}
+  m_EdgeRadius: 0
 --- !u!1 &762262269
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1181721459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,7 +675,7 @@ MonoBehaviour:
   colliderStepRatio: 0.1
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
 --- !u!114 &1181721460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,7 +693,9 @@ MonoBehaviour:
   externalForce: {x: 0, y: 0}
   isFacingRight: 1
   baseStats: {fileID: 11400000, guid: 6f4a74aa605f51b49aaf139057c9129f, type: 2}
+  orcWeapon: {fileID: 1708500689}
   player: {fileID: 0}
+  wardPosition: {x: 0, y: 0, z: 0}
 --- !u!50 &1181721461
 Rigidbody2D:
   serializedVersion: 5
@@ -709,8 +774,119 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1102182576}
+  - {fileID: 1708500687}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1708500686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1708500687}
+  - component: {fileID: 1708500689}
+  - component: {fileID: 1708500688}
+  m_Layer: 10
+  m_Name: Axe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1708500687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708500686}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1181721463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1708500688
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708500686}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 1.0192063, y: 0.096556306}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.2360274, y: 1.9226496}
+  m_EdgeRadius: 0
+--- !u!114 &1708500689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708500686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0168c00e3178447a8e6d5a57be1c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrcWeapon
+  weaponCollider: {fileID: 1708500688}
+  weaponInfo: {fileID: 11400000, guid: 4edd00f1dd3c6b94e891496549edd530, type: 2}
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &2046405523
 GameObject:
   m_ObjectHideFlags: 0

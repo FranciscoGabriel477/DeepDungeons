@@ -25,3 +25,4 @@ MonoBehaviour:
   minVerticalJumpVelocity: 8.660254
   gravityAcc: -24.999998
   jumpInitialSpeed: 9.999999
+  knockBackDecelaration: 40

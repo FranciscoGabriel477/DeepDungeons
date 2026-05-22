@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="Player Weapon Stats")]
+[CreateAssetMenu(menuName ="Weapon Stats")]
 
 public class WeaponInfo : ScriptableObject
 {

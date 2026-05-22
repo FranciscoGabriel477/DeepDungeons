@@ -17,6 +17,7 @@ public class PlayerBaseMoveStats : ScriptableObject
     public float minVerticalJumpVelocity;
     public float gravityAcc;
     public float jumpInitialSpeed;
+    public float knockBackDecelaration;
     private void OnValidate()
     {
         CalculateValues();

@@ -1,21 +1,28 @@
 using System;
+using Unity.Services.Analytics;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class EntityVisual : MonoBehaviour
 {
-    private Animator entityAnimator;
+    protected string mainStateName;
+    protected Animator animator;
 
     private void Awake()
     {
-        entityAnimator=GetComponent<Animator>();
+        animator=GetComponent<Animator>();
     }
-    public void PlayAnimation(string name)
+    /*public virtual void PlayAnimation(string name)
     {
-        entityAnimator.Play(name);
+        animator.Play(name);
+    }*/
+    public virtual bool CheckStateName(string name)
+    {
+        return animator.GetCurrentAnimatorStateInfo(0).IsName(name);
     }
-    public bool CheckStateName(string name)
+
+    public virtual void SetMainStateName(string stateName)
     {
-        return entityAnimator.GetCurrentAnimatorStateInfo(0).IsName(name);
+        mainStateName=stateName;
     }
 }

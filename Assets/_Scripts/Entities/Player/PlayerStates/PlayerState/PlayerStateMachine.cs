@@ -7,6 +7,7 @@ public class PlayerStateMachine : StateMachine<PlayerState>
         RegisterState(new IdlePlayerState(this,playerController));
         RegisterState(new WalkPlayerState(this,playerController));
         RegisterState(new AttackPlayerState(this,playerController));
+        RegisterState(new HurtPlayerState(this,playerController));
         SwitchState("Idle");
     }
 

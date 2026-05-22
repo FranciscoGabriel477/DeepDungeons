@@ -17,8 +17,9 @@ public class NotInAirPlayerState : PlayerAirState
     }
     public override void UpdateState(float deltaTime)
     {
-         if (!player.IsGrounded)
+        if (!player.IsGrounded)
         {
+            Debug.Log("Yeah");
             parent.SwitchState("Fall");
             return;
         }

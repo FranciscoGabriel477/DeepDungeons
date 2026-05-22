@@ -17,7 +17,7 @@ public class AttackPlayerState : PlayerState
         player.SetHorizontalFrameVelocity(0);
         player.playerVisual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
         player.playerVisual.OnEndOfAttackAnimation+=EndOfAttackAnimation;
-        player.playerVisual.PlayAnimation("Attack1");
+        //player.playerVisual.PlayAnimation("Attack1");
         actualTime=attackTime;
     }
 
@@ -52,7 +52,7 @@ public class AttackPlayerState : PlayerState
 
     public override bool CheckTrasitionConditions()
     {
-        return player.IsGrounded;
+        return player.IsGrounded && player.playerAirControlStateMachine.GetActualStateName()=="NotInAir" && parent.currentState.canAttack;
     }
     
 }

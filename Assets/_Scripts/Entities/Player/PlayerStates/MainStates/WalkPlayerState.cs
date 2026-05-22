@@ -7,7 +7,7 @@ public class WalkPlayerState : PlayerState
     public override void EntryState()
     {
         GameInputEnable();
-        player.playerVisual.PlayAnimation("Walk");
+        //player.playerVisual.PlayAnimation("Walk");
     }
 
     public override void UpdateState(float deltaTime)

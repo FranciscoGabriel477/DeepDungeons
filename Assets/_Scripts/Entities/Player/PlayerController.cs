@@ -9,6 +9,7 @@ public class PlayerController : EntityController
     public PlayerWeapon playerWeapon{get; private set;}  
     public GameInput gameInput{get; private set;}
     public PlayerBaseMoveStats baseMoveStats;
+    public PlayerBaseStats baseStats;
     public PlayerStateMachine playerStateMachine{get; private set;}
     public PlayerAirControlStateMachine playerAirControlStateMachine{get; private set;}
     private float currentTimerJumpBuffer=0;
@@ -29,6 +30,8 @@ public class PlayerController : EntityController
         isFacingRight=true;
         playerStateMachine= new PlayerStateMachine(this);
         playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
+        playerStateMachine.StateChanged+=playerVisual.MainStateChanged;
+        playerAirControlStateMachine.StateChanged+=playerVisual.AirStateChanged;
     }
 
     public void Update()
@@ -37,12 +40,12 @@ public class PlayerController : EntityController
         HandleMoveDir();
         playerStateMachine.Action(Time.deltaTime);
         playerAirControlStateMachine.Action(Time.deltaTime);
-        //Debug.Log(playerStateMachine.GetActualStateName());
-        //Debug.Log(playerAirControlStateMachine.GetActualStateName());
+        //Debug.Log(playerStateMachine.GetActualStateName() +" "+playerAirControlStateMachine.GetActualStateName());
     }
 
     public void FixedUpdate()
     {
+        externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,baseMoveStats.knockBackDecelaration*Time.fixedDeltaTime);
         IsGrounded=playerMover.CheckGround();
 
         if (playerStateMachine.AllowsRotate())
@@ -71,7 +74,6 @@ public class PlayerController : EntityController
     {
         if (playerStateMachine.GetState("Attack").CheckTrasitionConditions())
         {
-            //Debug.Log(playerStateMachine.GetActualStateName()+ " " +playerAirControlStateMachine.GetActualStateName());
             playerStateMachine.SwitchState("Attack");
         }
     }
@@ -129,8 +131,9 @@ public class PlayerController : EntityController
         moveDir=gameInput.GetNormalizedMovementInput(); 
     }
 
-    public void JumpCancel()
+    public override void GetHit(float damage,Vector2 knockBack)
     {
-        
+        base.GetHit(damage,knockBack);
+        playerStateMachine.SwitchState("Hurt");
     }
 }

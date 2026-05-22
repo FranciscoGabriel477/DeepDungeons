@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class State<T> where T: State<T>
 {
     protected  StateMachine<T> parent;
-    public readonly string stateName;
+    public string stateName;
 
     public State(StateMachine<T> parent, string stateName)
     {

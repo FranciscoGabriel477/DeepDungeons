@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: OrcBaseStats
   m_EditorClassIdentifier: Assembly-CSharp::OrcBaseStats
   moveHorizontalSpeed: 3
+  KOtime: 0.333
   gravityAcc: 10
   rangeOfVision: 10
   attackRange: 2
-  decelaration: 20
+  attackTime: 1
+  decelaration: 40
+  patrolRange: 3
+  minWardTime: 1
+  maxWardTime: 2
+  chaseRange: 10

@@ -22,22 +22,27 @@ public class GameInput : MonoBehaviour
             instance= this;
             DontDestroyOnLoad(gameObject);
             playerInputs= new PlayerInputs();
-            playerInputs.Player.Jump.performed += JumpPressed;
-            playerInputs.Player.Jump.canceled += JumpHelded;
-            playerInputs.Player.Run.performed += RunPressed;
-            playerInputs.Player.Attack.performed += AttackPressed;
-            playerInputs.Player.Run.canceled += RunHelded;
         }
     }
-
-    private void Start()
+    private void OnEnable()
     {
-        playerInputs.Player.Enable();
+        playerInputs.Player.Enable();     
+        playerInputs.Player.Jump.performed += JumpPressed;
+        playerInputs.Player.Jump.canceled += JumpHelded;
+        playerInputs.Player.Run.performed += RunPressed;
+        playerInputs.Player.Attack.performed += AttackPressed;
+        playerInputs.Player.Run.canceled += RunHelded;
+        
     }
 
     private void OnDestroy()
     {
         playerInputs.Player.Disable();
+        playerInputs.Player.Jump.performed -= JumpPressed;
+        playerInputs.Player.Jump.canceled -= JumpHelded;
+        playerInputs.Player.Run.performed -= RunPressed;
+        playerInputs.Player.Attack.performed -= AttackPressed;
+        playerInputs.Player.Run.canceled -= RunHelded;
     }
 
     public Vector2 GetNormalizedMovementInput()

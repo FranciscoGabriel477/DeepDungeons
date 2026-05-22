@@ -53,7 +53,7 @@ public class PlayerAlternativeController : MonoBehaviour
     private void Update()
     {
         moveInput=gameInput.GetNormalizedMovementInput();
-        playerVisual.PlayAnimation(moveInput!=Vector2.zero?"Running":"Idle");
+        //playerVisual.PlayAnimation(moveInput!=Vector2.zero?"Running":"Idle");
         JumpChecks();
         CountTimers();
     }

@@ -56,7 +56,7 @@ public class PlayerOldController : MonoBehaviour
     }
     private void HandleVisual()
     {
-        playerVisual.PlayAnimation(frameVelocity==Vector2.zero?"Idle":"Walk");
+        //playerVisual.PlayAnimation(frameVelocity==Vector2.zero?"Idle":"Walk");
     }
     private void HandleRotation()
     {

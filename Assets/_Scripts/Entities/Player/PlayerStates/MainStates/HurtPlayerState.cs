@@ -1,21 +1,26 @@
 using UnityEngine;
 
-public class HurtOrcState : OrcState
+public class HurtPlayerState : PlayerState
 {
     private float actualTime;
-    public HurtOrcState(OrcStateMachine parent,OrcController orc) : base(parent, "Hurt", orc){}
+    public HurtPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, "Hurt", player)
+    {
+        canJump=false;
+        canAttack=false;
+        canRotate=false;
+    }
 
     public override void EntryState()
     {
-        actualTime=orc.baseStats.KOtime;
-        orc.SetHorizontalFrameVelocity(0);
+        actualTime=player.baseStats.timeInHurtState;
+        player.SetHorizontalFrameVelocity(0);
     }
     public override void UpdateState(float deltaTime)
     {
         actualTime-=Time.deltaTime;
         if (actualTime <= 0)
         {
-            parent.SwitchState("Chase");
+            parent.SwitchState(player.moveDir.x==0?"Idle":"Walk");
             return;
         }
     }
