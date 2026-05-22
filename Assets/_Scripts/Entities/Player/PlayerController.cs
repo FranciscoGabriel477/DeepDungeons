@@ -25,7 +25,7 @@ public class PlayerController : EntityController
     private void Start()
     {
         SetupGameInput();
-        IsGrounded=playerMover.CheckGround();;
+        IsGrounded=playerMover.CheckGround();
         isFacingRight=true;
         playerStateMachine= new PlayerStateMachine(this);
         playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
