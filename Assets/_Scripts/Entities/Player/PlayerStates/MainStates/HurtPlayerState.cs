@@ -1,13 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HurtPlayerState : PlayerState
 {
     private float actualTime;
-    public HurtPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, "Hurt", player)
+    public HurtPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Hurt, player)
     {
         canJump=false;
-        canAttack=false;
         canRotate=false;
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack};
     }
 
     public override void EntryState()
@@ -17,19 +18,11 @@ public class HurtPlayerState : PlayerState
     }
     public override void UpdateState(float deltaTime)
     {
-        actualTime-=Time.deltaTime;
+        actualTime-=deltaTime;
         if (actualTime <= 0)
         {
-            parent.SwitchState(player.moveDir.x==0?"Idle":"Walk");
+            parent.SwitchState(player.moveDir.x==0?PlayerStateName.Idle:PlayerStateName.Walk);
             return;
         }
-    }
-    public override void FixedUpdateState(float fixedDeltaTime)
-    {
-        
-    }
-    public override void ExitState()
-    {
-        
     }
 }

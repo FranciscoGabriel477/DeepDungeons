@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBaseMoveStats
   moveHorizontalSpeed: 5
   timeTillApex: 0.4
+  timeInDashState: 0.2
+  dashSpeed: 12
   jumpHeight: 2
   minJumpHeight: 0.5
   maxVerticalSpeed: 50

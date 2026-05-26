@@ -8,7 +8,8 @@ public class PlayerStateMachine : StateMachine<PlayerState>
         RegisterState(new WalkPlayerState(this,playerController));
         RegisterState(new AttackPlayerState(this,playerController));
         RegisterState(new HurtPlayerState(this,playerController));
-        SwitchState("Idle");
+        RegisterState(new DashPlayerState(this,playerController));
+        SwitchState(PlayerStateName.Idle);
     }
 
     public bool AllowsJump()

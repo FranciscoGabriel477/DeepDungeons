@@ -45,8 +45,8 @@ public class PlayerAlternativeController : MonoBehaviour
     private void Start()
     {
         gameInput=GameInput.instance;
-        gameInput.OnRunPressed+=RunPressed;
-        gameInput.OnRunHelded+=RunHelded;
+        //gameInput.OnRunPressed+=RunPressed;
+        //gameInput.OnRunHelded+=RunHelded;
         gameInput.OnJumpPressed+=JumpPressed;
         gameInput.OnJumpHelded+=JumpHelded;
     }

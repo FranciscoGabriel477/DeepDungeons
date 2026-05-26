@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class JumpApexPlayerState : PlayerAirState
 {
-    public JumpApexPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,"JumpApex",player){}
+    public JumpApexPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,PlayerAirStateName.JumpApex,player){}
     public override void EntryState()
     {
-        GameInputEnable();
         player.SetVerticalFrameVelocity(0f);
         TimerHandler.CreateTimer(EndOfApexTime,player.baseMoveStats.timeInApexPoint,"ApexTimer");
     }
@@ -16,39 +15,18 @@ public class JumpApexPlayerState : PlayerAirState
         if(player.jumpIsHelded)
         {
             TimerHandler.StopTimer("ApexTimer");
-            parent.SwitchState("FastFall");
+            parent.SwitchState(PlayerAirStateName.FastFall);
             return;
         }
         if (player.IsGrounded)
         {
-            parent.SwitchState("NotInAir");
+            TimerHandler.StopTimer("ApexTimer");
+            parent.SwitchState(PlayerAirStateName.NotInAir);
             return;
         }
     }
-    public override void FixedUpdateState(float fixedDeltaTime)
-    {
-
-    }
-
-    public override void ExitState()
-    {
-        GameInputDisable();
-    }
-
     private void EndOfApexTime()
     {
-        parent.SwitchState("FastFall");
-    }
-
-    protected override void GameInputEnable()
-    {
-        gameInput.OnJumpPressed+=player.JumpPressed;
-        gameInput.OnJumpHelded+=player.JumpHelded;
-    }
-
-    protected override void GameInputDisable()
-    {
-        gameInput.OnJumpPressed-=player.JumpPressed;
-        gameInput.OnJumpHelded-=player.JumpHelded;
+        parent.SwitchState(PlayerAirStateName.FastFall);
     }
 }

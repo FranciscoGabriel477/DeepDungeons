@@ -6,6 +6,8 @@ public class PlayerBaseMoveStats : ScriptableObject
 {
     public float moveHorizontalSpeed;
     public float timeTillApex;
+    public float timeInDashState;
+    public float dashSpeed;
     public float jumpHeight;
     public float minJumpHeight;
     public float maxVerticalSpeed;

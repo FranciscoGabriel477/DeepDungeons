@@ -25,18 +25,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Run",
+                    "name": "Attack",
                     "type": "Button",
-                    "id": "28ea65e2-79a0-4945-a9ba-50d5b015f82a",
+                    "id": "e9a1efc2-27be-4d47-96ab-b9dc9a50d54f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "Dash",
                     "type": "Button",
-                    "id": "e9a1efc2-27be-4d47-96ab-b9dc9a50d54f",
+                    "id": "58524d4f-df92-4b48-bd71-d2993a1f1e83",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -167,23 +167,23 @@
                 },
                 {
                     "name": "",
-                    "id": "7e56eb0c-f6d9-454d-9b5a-c46f486c6f9a",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "3fdc8324-8914-4a2a-892e-ed8350bcc6ae",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b33f39c1-1c82-4343-9735-da9fc43a7efe",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

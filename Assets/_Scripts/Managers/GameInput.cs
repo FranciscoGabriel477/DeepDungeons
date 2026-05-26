@@ -8,9 +8,8 @@ public class GameInput : MonoBehaviour
     private PlayerInputs playerInputs;
     public event EventHandler OnJumpPressed;
     public event EventHandler OnJumpHelded;
-    public event EventHandler OnRunPressed;
-    public event EventHandler OnRunHelded;
     public event EventHandler OnAttackPressed;
+    public event EventHandler OnDashPressed;
     private void Awake()
     {
         if(instance != null && instance != this)
@@ -29,20 +28,18 @@ public class GameInput : MonoBehaviour
         playerInputs.Player.Enable();     
         playerInputs.Player.Jump.performed += JumpPressed;
         playerInputs.Player.Jump.canceled += JumpHelded;
-        playerInputs.Player.Run.performed += RunPressed;
         playerInputs.Player.Attack.performed += AttackPressed;
-        playerInputs.Player.Run.canceled += RunHelded;
+        playerInputs.Player.Dash.performed += DashPressed;
         
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         playerInputs.Player.Disable();
         playerInputs.Player.Jump.performed -= JumpPressed;
         playerInputs.Player.Jump.canceled -= JumpHelded;
-        playerInputs.Player.Run.performed -= RunPressed;
         playerInputs.Player.Attack.performed -= AttackPressed;
-        playerInputs.Player.Run.canceled -= RunHelded;
+        playerInputs.Player.Dash.performed -= DashPressed;
     }
 
     public Vector2 GetNormalizedMovementInput()
@@ -58,17 +55,13 @@ public class GameInput : MonoBehaviour
     {
         OnJumpHelded?.Invoke(this,EventArgs.Empty);
     }
-    public void RunPressed(InputAction.CallbackContext context)
-    {
-        OnRunPressed?.Invoke(this,EventArgs.Empty);
-    }
     public void AttackPressed(InputAction.CallbackContext context)
     {
         OnAttackPressed?.Invoke(this,EventArgs.Empty);
     }
-    public void RunHelded(InputAction.CallbackContext context)
+    public void DashPressed(InputAction.CallbackContext context)
     {
-        OnRunHelded?.Invoke(this,EventArgs.Empty);
+        OnDashPressed?.Invoke(this,EventArgs.Empty);
     }
     
 }

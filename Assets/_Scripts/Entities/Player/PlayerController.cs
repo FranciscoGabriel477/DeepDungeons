@@ -40,7 +40,7 @@ public class PlayerController : EntityController
         HandleMoveDir();
         playerStateMachine.Action(Time.deltaTime);
         playerAirControlStateMachine.Action(Time.deltaTime);
-        //Debug.Log(playerStateMachine.GetActualStateName() +" "+playerAirControlStateMachine.GetActualStateName());
+        Debug.Log(playerStateMachine.GetActualStateName());
     }
 
     public void FixedUpdate()
@@ -55,6 +55,11 @@ public class PlayerController : EntityController
         playerStateMachine.FixedAction(Time.fixedDeltaTime);
         playerAirControlStateMachine.FixedAction(Time.fixedDeltaTime);
         Move();
+    }
+
+    public void Oestroy()
+    {
+        DisabelGameInput();
     }
     private void CountTimers()
     {
@@ -72,9 +77,17 @@ public class PlayerController : EntityController
     
     public void AttackPressed(object sender, EventArgs e)
     {
-        if (playerStateMachine.GetState("Attack").CheckTrasitionConditions())
+        if (playerStateMachine.GetState(PlayerStateName.Attack).CheckTrasitionConditions())
         {
-            playerStateMachine.SwitchState("Attack");
+            playerStateMachine.SwitchState(PlayerStateName.Attack);
+        }
+    }
+
+    public void DashPressed(object sender, EventArgs e)
+    {
+        if (playerStateMachine.GetState(PlayerStateName.Dash).CheckTrasitionConditions())
+        {
+            playerStateMachine.SwitchState(PlayerStateName.Dash);
         }
     }
     public void JumpPressed(object sender, EventArgs e)
@@ -128,12 +141,22 @@ public class PlayerController : EntityController
         gameInput = GameInput.instance;
         gameInput.OnJumpPressed+=JumpPressed;
         gameInput.OnJumpHelded+=JumpHelded;
+        gameInput.OnAttackPressed+=AttackPressed;
+        gameInput.OnDashPressed+=DashPressed;
         moveDir=gameInput.GetNormalizedMovementInput(); 
+    }
+
+    private void DisabelGameInput()
+    {
+        gameInput.OnJumpPressed-=JumpPressed;
+        gameInput.OnJumpHelded-=JumpHelded;
+        gameInput.OnAttackPressed-=AttackPressed;
+        gameInput.OnDashPressed-=DashPressed;
     }
 
     public override void GetHit(float damage,Vector2 knockBack)
     {
         base.GetHit(damage,knockBack);
-        playerStateMachine.SwitchState("Hurt");
+        playerStateMachine.SwitchState(PlayerStateName.Hurt);
     }
 }

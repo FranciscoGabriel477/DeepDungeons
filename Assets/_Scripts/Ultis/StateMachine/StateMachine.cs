@@ -57,9 +57,14 @@ public abstract class StateMachine<T> where T:State<T>
         currentState.EntryState();
     }
 
-    public bool IsActive(T state)
+    public bool AllowsTransition(string stateName)
     {
-        return currentState==state;
+        return !currentState.notAllowedTransitions.Contains(stateName);
+    }
+
+    public bool AllowsAction(string actionName)
+    {
+        return !currentState.notAllowedActions.Contains(actionName);
     }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class OrcVisual : EntityVisual
 {
     public event EventHandler OnInitiateOfAttackAnimation;
-    public event EventHandler OnEndOfAttackAnimation;
+
     public void MainStateChanged(object sender,StateMachine<OrcState>.StateChangeInfo stateChangeInfo)
     {
         mainStateName=stateChangeInfo.newState.stateName;
@@ -39,9 +39,5 @@ public class OrcVisual : EntityVisual
         OnInitiateOfAttackAnimation?.Invoke(this,EventArgs.Empty);
     }
 
-    public void EndOfAttackAnimation()
-    {
-        OnEndOfAttackAnimation?.Invoke(this,EventArgs.Empty);
-    }
     
 }

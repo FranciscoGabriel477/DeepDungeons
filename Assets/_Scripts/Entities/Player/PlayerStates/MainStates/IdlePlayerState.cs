@@ -1,19 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class IdlePlayerState : PlayerState
 {
-    public IdlePlayerState(PlayerStateMachine parent,PlayerController player) : base(parent,"Idle",player){}
-    public override void EntryState()
-    {
-        GameInputEnable();
-    }
+    public IdlePlayerState(PlayerStateMachine parent,PlayerController player) : base(parent,PlayerStateName.Idle,player){}
 
     public override void UpdateState(float deltaTime)
     {
-        base.UpdateState(deltaTime);
         if (player.moveDir.x != 0)
         {
-            parent.SwitchState("Walk");
+            parent.SwitchState(PlayerStateName.Walk);
             return;
         }
         
@@ -22,10 +18,4 @@ public class IdlePlayerState : PlayerState
     {
         HandleHorizontalMomentum();
     }
-
-    public override void ExitState()
-    {
-        GameInputDisable();
-    }
-
 }

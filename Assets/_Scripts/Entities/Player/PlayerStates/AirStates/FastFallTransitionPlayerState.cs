@@ -4,10 +4,9 @@ public class FastFallTransitionPlayerState : PlayerAirState
 {
     private float currentTimerInFastFallingTrasition;
     private float verticalVelocityInJumpHeld;
-    public FastFallTransitionPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,"FastFallTransition",player){}
+    public FastFallTransitionPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,PlayerAirStateName.FastFallTransition,player){}
     public override void EntryState()
     {
-        GameInputEnable();
         verticalVelocityInJumpHeld=player.frameVelocity.y;
         currentTimerInFastFallingTrasition=player.baseMoveStats.timeInFastFallingTrasition;
     }
@@ -18,12 +17,12 @@ public class FastFallTransitionPlayerState : PlayerAirState
         currentTimerInFastFallingTrasition-=deltaTime;
         if (currentTimerInFastFallingTrasition <= 0)
         {
-            parent.SwitchState("FastFall");
+            parent.SwitchState(PlayerAirStateName.FastFall);
             return;
         }
         if (player.IsGrounded)
         {
-            parent.SwitchState("NotInAir");
+            parent.SwitchState(PlayerAirStateName.NotInAir);
             return;
         }
     }
@@ -32,10 +31,7 @@ public class FastFallTransitionPlayerState : PlayerAirState
         HandleVerticalMomentum(fixedDeltaTime);
     }
 
-    public override void ExitState()
-    {
-        GameInputDisable(); 
-    }
+    
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
@@ -43,15 +39,4 @@ public class FastFallTransitionPlayerState : PlayerAirState
         player.SetVerticalFrameVelocity(newVelocityY);
     }
 
-    protected override void GameInputEnable()
-    {
-        gameInput.OnJumpPressed+=player.JumpPressed;
-        gameInput.OnJumpHelded+=player.JumpHelded;
-    }
-
-    protected override void GameInputDisable()
-    {
-        gameInput.OnJumpPressed-=player.JumpPressed;
-        gameInput.OnJumpHelded-=player.JumpHelded;
-    }
 }

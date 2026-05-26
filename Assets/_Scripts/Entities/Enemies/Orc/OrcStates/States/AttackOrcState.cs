@@ -14,7 +14,7 @@ public class AttackOrcState : OrcState
         orc.SetHorizontalFrameVelocity(0);
         actualTime=orc.baseStats.attackTime;
         orc.orcVisual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
-        orc.orcVisual.OnEndOfAttackAnimation+=EndOfAttackAnimation;
+        //orc.orcVisual.OnEndOfAttackAnimation+=EndOfAttackAnimation;
     }
     public override void UpdateState(float deltaTime)
     {
@@ -33,12 +33,12 @@ public class AttackOrcState : OrcState
     public override void ExitState()
     {
         orc.orcVisual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
-        orc.orcVisual.OnEndOfAttackAnimation-=EndOfAttackAnimation;
+        //orc.orcVisual.OnEndOfAttackAnimation-=EndOfAttackAnimation;
     }
 
-    private void EndOfAttackAnimation(object sender, EventArgs e){
+    //private void EndOfAttackAnimation(object sender, EventArgs e){
         //parent.SwitchState("Chase");
-    }
+    //}
     private void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
         orc.orcWeapon.Attack(orc.transform.rotation.eulerAngles.y);

@@ -12,7 +12,7 @@ public class HurtOrcState : OrcState
     }
     public override void UpdateState(float deltaTime)
     {
-        actualTime-=Time.deltaTime;
+        actualTime-=deltaTime;
         if (actualTime <= 0)
         {
             parent.SwitchState("Chase");
