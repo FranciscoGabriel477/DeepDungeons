@@ -398,14 +398,11 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 256
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!4 &567906327
 Transform:
   m_ObjectHideFlags: 0
@@ -671,8 +668,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrcMover
   colliderHeight: 1.05
-  colliderThickness: 1
-  colliderStepRatio: 0.1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -879,14 +874,11 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 64
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &2046405523
 GameObject:
   m_ObjectHideFlags: 0

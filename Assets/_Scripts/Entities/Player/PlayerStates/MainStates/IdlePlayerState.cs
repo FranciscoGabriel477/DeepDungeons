@@ -6,7 +6,6 @@ public class IdlePlayerState : PlayerState
     public override void EntryState()
     {
         GameInputEnable();
-        //player.playerVisual.PlayAnimation("Idle");
     }
 
     public override void UpdateState(float deltaTime)

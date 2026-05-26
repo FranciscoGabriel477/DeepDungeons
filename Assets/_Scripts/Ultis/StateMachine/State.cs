@@ -10,9 +10,9 @@ public abstract class State<T> where T: State<T>
         this.parent=parent;
         this.stateName=stateName;
     }
-    public abstract void EntryState();
-    public abstract void UpdateState(float deltaTime);
-    public abstract void FixedUpdateState(float fixedDeltaTime);
-    public abstract void ExitState();
+    public virtual void EntryState(){}
+    public virtual void UpdateState(float deltaTime){}
+    public virtual void FixedUpdateState(float fixedDeltaTime){}
+    public virtual void ExitState(){}
 
 }

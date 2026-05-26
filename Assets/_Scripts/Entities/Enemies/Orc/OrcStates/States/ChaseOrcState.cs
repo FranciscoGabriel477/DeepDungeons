@@ -38,6 +38,5 @@ public class ChaseOrcState : OrcState
     protected override void HandleMoveDir()
     {
         orc.moveDir=Vector3.Normalize((orc.GetPlayerPos().x*Vector3.right-orc.transform.position));
-        //Debug.Log(orc.moveDir);
     }
 }

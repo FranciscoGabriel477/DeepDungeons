@@ -18,6 +18,7 @@ public class AttackOrcState : OrcState
     }
     public override void UpdateState(float deltaTime)
     {
+        HandleMoveDir();
         actualTime-=deltaTime;
         if (actualTime <= 0)
         {
@@ -41,5 +42,9 @@ public class AttackOrcState : OrcState
     private void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
         orc.orcWeapon.Attack(orc.transform.rotation.eulerAngles.y);
+    }
+    protected override void HandleMoveDir()
+    {
+        orc.moveDir=Vector3.Normalize((orc.GetPlayerPos().x*Vector3.right-orc.transform.position));
     }
 }

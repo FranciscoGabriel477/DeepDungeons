@@ -30,8 +30,8 @@ public class PlayerController : EntityController
         isFacingRight=true;
         playerStateMachine= new PlayerStateMachine(this);
         playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
-        playerStateMachine.StateChanged+=playerVisual.MainStateChanged;
-        playerAirControlStateMachine.StateChanged+=playerVisual.AirStateChanged;
+        playerStateMachine.StateChanged += playerVisual.MainStateChanged;
+        playerAirControlStateMachine.StateChanged += playerVisual.AirStateChanged;
     }
 
     public void Update()

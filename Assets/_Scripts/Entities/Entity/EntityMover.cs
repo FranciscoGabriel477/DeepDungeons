@@ -8,10 +8,7 @@ public class EntityMover : MonoBehaviour
     private CapsuleCollider2D col;
     private bool IsGrounded;
     [SerializeField] private float colliderHeight;
-    [SerializeField] private float colliderThickness;
-    [SerializeField] private float colliderStepRatio;
     [SerializeField] private LayerMask groundLayerMask;
-    private Vector2 groundAdjustmentVelocity;
     public void Awake()
     {
         rb=GetComponent<Rigidbody2D>();
@@ -20,7 +17,7 @@ public class EntityMover : MonoBehaviour
 
     public void SetVelocity(Vector2 velocity)
     {
-        rb.linearVelocity=velocity+groundAdjustmentVelocity;
+        rb.linearVelocity=velocity;
     }
 
     public bool CheckGround()

@@ -34,7 +34,7 @@ public class FastFallTransitionPlayerState : PlayerAirState
 
     public override void ExitState()
     {
-        GameInputDisable();
+        GameInputDisable(); 
     }
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)

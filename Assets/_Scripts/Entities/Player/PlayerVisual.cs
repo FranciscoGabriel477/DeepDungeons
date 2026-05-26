@@ -34,17 +34,14 @@ public class PlayerVisual : EntityVisual
 
             case "Walk":
             animator.Play("Walk");
-
             break;
 
             case "Attack":
             animator.Play("Attack1");
-
             break;
 
             case "Hurt":
             animator.Play("Hurt");
-
             break;
             
             default:

@@ -5,10 +5,10 @@ public class EntityWeapon : MonoBehaviour
     public Collider2D weaponCollider;
     public WeaponInfo weaponInfo;
     public ContactFilter2D contactFilter;
-    public LayerMask targetLayer;
+    //public LayerMask targetLayer;
     private void Start()
     {
-        contactFilter.SetLayerMask(targetLayer);
+        //contactFilter.SetLayerMask(targetLayer);
         contactFilter.useLayerMask=true;
     }
     public virtual void Attack(float dir)

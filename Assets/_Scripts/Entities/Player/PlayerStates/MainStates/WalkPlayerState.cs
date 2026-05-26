@@ -7,12 +7,10 @@ public class WalkPlayerState : PlayerState
     public override void EntryState()
     {
         GameInputEnable();
-        //player.playerVisual.PlayAnimation("Walk");
     }
 
     public override void UpdateState(float deltaTime)
     {
-        base.UpdateState(deltaTime);
         if (player.moveDir.x == 0)
         {
             parent.SwitchState("Idle");

@@ -13,28 +13,17 @@ public class PlayerState : State<PlayerState>
         this.player=player;
         gameInput=GameInput.instance;
     }
-    public override void EntryState(){}
-    public override void UpdateState(float deltaTime)
-    {
-    }
-    public override void FixedUpdateState(float fixedDeltaTime)
-    {
-    }
-    public override void ExitState(){}
-
-    protected virtual void HandleHorizontalMomentum()
+    protected virtual void HandleHorizontalMomentum() 
     {
         player.SetHorizontalFrameVelocity(player.moveDir.x*player.baseMoveStats.moveHorizontalSpeed);
     }
     protected virtual void GameInputEnable()
     {
-        
         gameInput.OnAttackPressed+=player.AttackPressed;
     }
 
     protected virtual void GameInputDisable()
     {
-        
         gameInput.OnAttackPressed-=player.AttackPressed;
     }
 

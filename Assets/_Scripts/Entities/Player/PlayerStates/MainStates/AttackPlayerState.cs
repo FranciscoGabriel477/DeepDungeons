@@ -13,11 +13,9 @@ public class AttackPlayerState : PlayerState
     float actualTime;
     public override void EntryState()
     {
-    
         player.SetHorizontalFrameVelocity(0);
         player.playerVisual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
         player.playerVisual.OnEndOfAttackAnimation+=EndOfAttackAnimation;
-        //player.playerVisual.PlayAnimation("Attack1");
         actualTime=attackTime;
     }
 
@@ -42,7 +40,8 @@ public class AttackPlayerState : PlayerState
         player.playerVisual.OnEndOfAttackAnimation-=EndOfAttackAnimation;
     }
 
-    private void EndOfAttackAnimation(object sender, EventArgs e){
+    private void EndOfAttackAnimation(object sender, EventArgs e)
+    {
         parent.SwitchState(player.moveDir.x==0?"Idle":"Walk");
     }
     private void InitiateOfAttackAnimation(object sender, EventArgs e)

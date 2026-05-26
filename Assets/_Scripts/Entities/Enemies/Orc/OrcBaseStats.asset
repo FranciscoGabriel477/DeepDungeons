@@ -16,7 +16,7 @@ MonoBehaviour:
   KOtime: 0.333
   gravityAcc: 10
   rangeOfVision: 10
-  attackRange: 2
+  attackRange: 1.7
   attackTime: 1
   decelaration: 40
   patrolRange: 3
