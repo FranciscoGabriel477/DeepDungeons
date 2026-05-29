@@ -7,7 +7,7 @@ using UnityEngine.Scripting.APIUpdating;
 public class PlayerAlternativeController : MonoBehaviour
 {
     public PlayerAlternativeMovementStats moveStats;
-    [SerializeField] private PlayerVisual playerVisual;
+    //[SerializeField] private PlayerVisual playerVisual;
     [SerializeField] private Collider2D bodyCollider;
     [SerializeField] private Collider2D footCollider;
     private Rigidbody2D rb;

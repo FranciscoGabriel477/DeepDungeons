@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerController : EntityController
 {
     public PlayerMover playerMover{get; private set;} 
-    public PlayerVisual playerVisual{get; private set;}  
-    public PlayerWeapon playerWeapon{get; private set;}  
+    public PlayerCharacterClassVisual playerVisual{get; private set;}  
+    public PlayerCharacterClass characterClass{get; private set;}  
     public GameInput gameInput{get; private set;}
     public PlayerBaseMoveStats baseMoveStats;
     public PlayerBaseStats baseStats;
@@ -19,8 +19,9 @@ public class PlayerController : EntityController
     {
         
         playerMover=GetComponent<PlayerMover>();
-        playerVisual=GetComponentInChildren<PlayerVisual>();
-        playerWeapon=GetComponentInChildren<PlayerWeapon>();
+        playerVisual=GetComponentInChildren<PlayerCharacterClassVisual>();
+        characterClass=GetComponentInChildren<PlayerCharacterClass>();
+        
     }
 
     private void Start()
@@ -30,8 +31,8 @@ public class PlayerController : EntityController
         isFacingRight=true;
         playerStateMachine= new PlayerStateMachine(this);
         playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
-        playerStateMachine.StateChanged += playerVisual.MainStateChanged;
-        playerAirControlStateMachine.StateChanged += playerVisual.AirStateChanged;
+        playerStateMachine.OnStateChanged += playerVisual.MainStateChanged;
+        playerAirControlStateMachine.OnStateChanged += playerVisual.AirStateChanged;
     }
 
     public void Update()
@@ -40,7 +41,7 @@ public class PlayerController : EntityController
         HandleMoveDir();
         playerStateMachine.Action(Time.deltaTime);
         playerAirControlStateMachine.Action(Time.deltaTime);
-        Debug.Log(playerStateMachine.GetActualStateName());
+        //Debug.Log(playerStateMachine.GetActualStateName());
     }
 
     public void FixedUpdate()
@@ -57,7 +58,7 @@ public class PlayerController : EntityController
         Move();
     }
 
-    public void Oestroy()
+    public void OnDestroy()
     {
         DisabelGameInput();
     }
@@ -73,35 +74,6 @@ public class PlayerController : EntityController
     {
         return currentTimerJumpBuffer>0f && IsGrounded && playerStateMachine.AllowsJump();
     }
-
-    
-    public void AttackPressed(object sender, EventArgs e)
-    {
-        if (playerStateMachine.GetState(PlayerStateName.Attack).CheckTrasitionConditions())
-        {
-            playerStateMachine.SwitchState(PlayerStateName.Attack);
-        }
-    }
-
-    public void DashPressed(object sender, EventArgs e)
-    {
-        if (playerStateMachine.GetState(PlayerStateName.Dash).CheckTrasitionConditions())
-        {
-            playerStateMachine.SwitchState(PlayerStateName.Dash);
-        }
-    }
-    public void JumpPressed(object sender, EventArgs e)
-    {
-        currentTimerJumpBuffer=baseMoveStats.jumpBufferTimer;   
-        jumpIsHelded=false;
-        jumpIsPressed=true;
-    }
-    public void JumpHelded(object sender, EventArgs e)
-    {
-        jumpIsHelded=true;
-        jumpIsPressed=false;
-    }
-
     public void Move()
     {
         playerMover.SetVelocity(frameVelocity+externalForce);
@@ -135,7 +107,39 @@ public class PlayerController : EntityController
     {
         moveDir=gameInput.GetNormalizedMovementInput();
     }
+     public void AttackPressed(object sender, EventArgs e)
+    {
+        if (playerStateMachine.GetState(PlayerStateName.Attack).CheckTrasitionConditions())
+        {
+            playerStateMachine.SwitchState(PlayerStateName.Attack);
+        }
+    }
 
+    public void DashPressed(object sender, EventArgs e)
+    {
+        if (playerStateMachine.GetState(PlayerStateName.Dash).CheckTrasitionConditions())
+        {
+            playerStateMachine.SwitchState(PlayerStateName.Dash);
+        }
+    }
+    public void JumpPressed(object sender, EventArgs e)
+    {
+        currentTimerJumpBuffer=baseMoveStats.jumpBufferTimer;   
+        jumpIsHelded=false;
+        jumpIsPressed=true;
+    }
+    public void JumpHelded(object sender, EventArgs e)
+    {
+        jumpIsHelded=true;
+        jumpIsPressed=false;
+    }
+    public void BlockPressed(object sender, EventArgs e)
+    {
+        if (playerStateMachine.GetState(PlayerStateName.Block).CheckTrasitionConditions())
+        {
+            playerStateMachine.SwitchState(PlayerStateName.Block);
+        }
+    }
     private void SetupGameInput()
     {
         gameInput = GameInput.instance;
@@ -143,6 +147,7 @@ public class PlayerController : EntityController
         gameInput.OnJumpHelded+=JumpHelded;
         gameInput.OnAttackPressed+=AttackPressed;
         gameInput.OnDashPressed+=DashPressed;
+        gameInput.OnBlockPressed+=BlockPressed;
         moveDir=gameInput.GetNormalizedMovementInput(); 
     }
 
@@ -151,12 +156,23 @@ public class PlayerController : EntityController
         gameInput.OnJumpPressed-=JumpPressed;
         gameInput.OnJumpHelded-=JumpHelded;
         gameInput.OnAttackPressed-=AttackPressed;
+        gameInput.OnBlockPressed-=BlockPressed;
         gameInput.OnDashPressed-=DashPressed;
     }
 
-    public override void GetHit(float damage,Vector2 knockBack)
+    public override void GetHit(HitInfo hitInfo)
     {
-        base.GetHit(damage,knockBack);
+        if (playerStateMachine.GetActualStateName() == PlayerStateName.Block)
+        {
+            BlockPlayerState blockPlayerState=playerStateMachine.GetState(PlayerStateName.Block) as BlockPlayerState;
+            if (blockPlayerState.TryBlock(hitInfo))
+            {
+                Debug.Log("Defendeu");
+                return;
+            }
+        }
+        base.GetHit(hitInfo);
         playerStateMachine.SwitchState(PlayerStateName.Hurt);
     }
+
 }

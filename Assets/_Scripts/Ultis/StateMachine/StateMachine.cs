@@ -8,7 +8,7 @@ public abstract class StateMachine<T> where T:State<T>
     protected Dictionary<string,T> states;
     public T currentState{get;protected set;}
 
-    public event EventHandler<StateChangeInfo> StateChanged;
+    public event EventHandler<StateChangeInfo> OnStateChanged;
     public class StateChangeInfo: EventArgs
     {
         public T newState;
@@ -48,7 +48,7 @@ public abstract class StateMachine<T> where T:State<T>
     }
     public void SwitchState(string stateName)
     {
-        StateChanged?.Invoke(this, new StateChangeInfo{oldState=currentState, newState=states[stateName]});
+        OnStateChanged?.Invoke(this, new StateChangeInfo{oldState=currentState, newState=states[stateName]});
         if (currentState != null)
         {
             currentState.ExitState();

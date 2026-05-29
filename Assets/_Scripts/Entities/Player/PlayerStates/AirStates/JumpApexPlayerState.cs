@@ -11,7 +11,6 @@ public class JumpApexPlayerState : PlayerAirState
 
     public override void UpdateState(float deltaTime)
     {
-        base.UpdateState(deltaTime);
         if(player.jumpIsHelded)
         {
             TimerHandler.StopTimer("ApexTimer");

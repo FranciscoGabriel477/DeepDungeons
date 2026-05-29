@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerOldController : MonoBehaviour
 {
     public PlayerMover playerMover{get; private set;} 
-    public PlayerVisual playerVisual{get; private set;}  
+   // public PlayerVisual playerVisual{get; private set;}  
     public GameInput gameInput{get; private set;}  
     public Vector2 moveDir{get; private set;} 
     public Vector2 frameVelocity;
@@ -28,7 +28,7 @@ public class PlayerOldController : MonoBehaviour
     public void Awake()
     {
         playerMover=GetComponent<PlayerMover>();
-        playerVisual=GetComponentInChildren<PlayerVisual>();
+        //playerVisual=GetComponentInChildren<PlayerVisual>();
     }
 
     private void Start()

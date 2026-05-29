@@ -7,9 +7,8 @@ public class DashPlayerState : PlayerState
     private float actualTime;
     public DashPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Dash, player)
     {
-        canJump=false;
-        canRotate=false;
-        notAllowedTransitions = new HashSet<string>{PlayerStateName.Attack,PlayerStateName.Dash};
+        notAllowedActions= new HashSet<string>{PlayerActionName.Jump,PlayerActionName.Rotate};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Attack,PlayerStateName.Dash,PlayerStateName.Block};
     }
 
     public override void EntryState()

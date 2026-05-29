@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EntityController : MonoBehaviour
+public class EntityController : MonoBehaviour, IHitable
 {
     public Vector2 moveDir;
     public Vector2 frameVelocity;
@@ -19,9 +19,9 @@ public class EntityController : MonoBehaviour
         
     }
 
-    public virtual void GetHit(float damage,Vector2 knockBack)
+    public virtual void GetHit(HitInfo hitInfo)
     {
-        externalForce=knockBack;
+        externalForce=hitInfo.knockBack;
     }
 }
 

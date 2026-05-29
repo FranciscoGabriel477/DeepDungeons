@@ -18,7 +18,7 @@ public class EntityWeapon : MonoBehaviour
         if (enemiesHitted[0])
         {
             Vector2 KnockBackDir=transform.position.x-enemiesHitted[0].transform.position.x<0?Vector2.right:Vector2.left;
-            enemiesHitted[0].collider.gameObject.GetComponent<EntityController>().GetHit(weaponInfo.damage,KnockBackDir*weaponInfo.knockBackImpulse);
+            enemiesHitted[0].collider.gameObject.GetComponent<IHitable>().GetHit(new HitInfo{damage=weaponInfo.damage, knockBack=KnockBackDir*weaponInfo.knockBackImpulse,posOrigin=transform.position});
         }
     }
 }

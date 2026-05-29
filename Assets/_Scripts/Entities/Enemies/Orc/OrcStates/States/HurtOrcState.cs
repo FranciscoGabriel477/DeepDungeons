@@ -3,7 +3,7 @@ using UnityEngine;
 public class HurtOrcState : OrcState
 {
     private float actualTime;
-    public HurtOrcState(OrcStateMachine parent,OrcController orc) : base(parent, "Hurt", orc){}
+    public HurtOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Hurt, orc){}
 
     public override void EntryState()
     {
@@ -15,16 +15,9 @@ public class HurtOrcState : OrcState
         actualTime-=deltaTime;
         if (actualTime <= 0)
         {
-            parent.SwitchState("Chase");
+            parent.SwitchState(OrcStateName.Chase);
             return;
         }
     }
-    public override void FixedUpdateState(float fixedDeltaTime)
-    {
-        
-    }
-    public override void ExitState()
-    {
-        
-    }
+   
 }

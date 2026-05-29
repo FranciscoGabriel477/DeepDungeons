@@ -5,7 +5,6 @@ public class FastFallPlayerState : PlayerAirState
     public FastFallPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,PlayerAirStateName.FastFall,player){}
     public override void UpdateState(float deltaTime)
     {
-        base.UpdateState(deltaTime);
         if (player.IsGrounded)
         {
             parent.SwitchState(PlayerAirStateName.NotInAir);

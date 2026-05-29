@@ -13,7 +13,6 @@ public class FastFallTransitionPlayerState : PlayerAirState
 
     public override void UpdateState(float deltaTime)
     {
-        base.UpdateState(deltaTime);
         currentTimerInFastFallingTrasition-=deltaTime;
         if (currentTimerInFastFallingTrasition <= 0)
         {

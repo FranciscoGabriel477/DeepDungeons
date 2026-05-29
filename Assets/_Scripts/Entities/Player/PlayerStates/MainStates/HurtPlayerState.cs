@@ -6,9 +6,8 @@ public class HurtPlayerState : PlayerState
     private float actualTime;
     public HurtPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Hurt, player)
     {
-        canJump=false;
-        canRotate=false;
-        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack};
+        notAllowedActions= new HashSet<string>{PlayerActionName.Jump,PlayerActionName.Rotate};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack,PlayerStateName.Block};
     }
 
     public override void EntryState()

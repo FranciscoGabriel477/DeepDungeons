@@ -3,14 +3,8 @@ using UnityEngine;
 
 public class ChaseOrcState : OrcState
 {
-    public ChaseOrcState(OrcStateMachine parent,OrcController orc) : base(parent, "Chase", orc)
-    {
-    }
+    public ChaseOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Chase, orc){}
 
-    public override void EntryState()
-    {
-        //orc.orcVisual.PlayAnimation("Walk");
-    }
     public override void UpdateState(float deltaTime)
     {
         HandleMoveDir();
@@ -21,12 +15,12 @@ public class ChaseOrcState : OrcState
         base.FixedUpdateState(fixedDeltaTime);
         if ((orc.GetPlayerPos() - orc.transform.position).magnitude <= orc.baseStats.attackRange)
         {
-            parent.SwitchState("Attack");
+            parent.SwitchState(OrcStateName.Attack);
             return;
         }
         if((orc.GetPlayerPos() - orc.transform.position).magnitude >= orc.baseStats.chaseRange)
         {
-            parent.SwitchState("Patrol");
+            parent.SwitchState(OrcStateName.Patrol);
             return;
         }
     }

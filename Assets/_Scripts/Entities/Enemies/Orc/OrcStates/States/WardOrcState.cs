@@ -4,7 +4,7 @@ using UnityEngine;
 public class WardOrcState : OrcState
 {
     private float currentTimeOnWard;
-    public WardOrcState(OrcStateMachine parent,OrcController orc) : base(parent, "Ward", orc){}
+    public WardOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Ward, orc){}
 
     public override void EntryState()
     {
@@ -16,21 +16,17 @@ public class WardOrcState : OrcState
         currentTimeOnWard-=deltaTime;
         if (currentTimeOnWard <= 0)
         {
-            parent.SwitchState("Patrol");
+            parent.SwitchState(OrcStateName.Patrol);
             return;
         }
         if ((orc.GetPlayerPos()-orc.transform.position).magnitude<orc.baseStats.rangeOfVision)
         {
-            parent.SwitchState("Chase");
+            parent.SwitchState(OrcStateName.Chase);
             return;
         }
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
         base.FixedUpdateState(fixedDeltaTime);
-    }
-    public override void ExitState()
-    {
-        
     }
 }

@@ -10,6 +10,8 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnJumpHelded;
     public event EventHandler OnAttackPressed;
     public event EventHandler OnDashPressed;
+    public event EventHandler OnBlockPressed;
+    public event EventHandler OnBlockReleased;
     private void Awake()
     {
         if(instance != null && instance != this)
@@ -30,6 +32,8 @@ public class GameInput : MonoBehaviour
         playerInputs.Player.Jump.canceled += JumpHelded;
         playerInputs.Player.Attack.performed += AttackPressed;
         playerInputs.Player.Dash.performed += DashPressed;
+        playerInputs.Player.Block.performed += BlockPressed;
+        playerInputs.Player.Block.canceled += BlockReleased;
         
     }
 
@@ -40,6 +44,8 @@ public class GameInput : MonoBehaviour
         playerInputs.Player.Jump.canceled -= JumpHelded;
         playerInputs.Player.Attack.performed -= AttackPressed;
         playerInputs.Player.Dash.performed -= DashPressed;
+        playerInputs.Player.Block.performed -= BlockPressed;
+        playerInputs.Player.Block.canceled -= BlockReleased;
     }
 
     public Vector2 GetNormalizedMovementInput()
@@ -62,6 +68,14 @@ public class GameInput : MonoBehaviour
     public void DashPressed(InputAction.CallbackContext context)
     {
         OnDashPressed?.Invoke(this,EventArgs.Empty);
+    }
+    public void BlockPressed(InputAction.CallbackContext context)
+    {
+        OnBlockPressed?.Invoke(this,EventArgs.Empty);
+    }
+    public void BlockReleased(InputAction.CallbackContext context)
+    {
+        OnBlockReleased?.Invoke(this,EventArgs.Empty);
     }
     
 }

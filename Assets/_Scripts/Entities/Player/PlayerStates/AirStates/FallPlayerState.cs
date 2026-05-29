@@ -4,9 +4,7 @@ public class FallPlayerState : PlayerAirState
 {
     public FallPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,PlayerAirStateName.Fall,player){}
     public override void UpdateState(float deltaTime)
-    {
-        base.UpdateState(deltaTime);
-        
+    {        
         if (player.IsGrounded)
         {
             player.SetVerticalFrameVelocity(0);

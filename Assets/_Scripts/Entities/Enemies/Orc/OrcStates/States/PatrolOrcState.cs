@@ -5,7 +5,7 @@ public class PatrolOrcState : OrcState
 {
     private Vector3 targetPosition;
     private Vector3 initialPosition;
-    public PatrolOrcState(OrcStateMachine parent,OrcController orc) : base(parent, "Patrol", orc){}
+    public PatrolOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Patrol, orc){}
 
     public override void EntryState()
     {
@@ -18,12 +18,12 @@ public class PatrolOrcState : OrcState
         HandleMoveDir();
         if (Mathf.InverseLerp(initialPosition.x,targetPosition.x,orc.transform.position.x)>0.97f)
         {
-            parent.SwitchState("Ward");
+            parent.SwitchState(OrcStateName.Ward);
             return;
         }
         if ((orc.GetPlayerPos()-orc.transform.position).magnitude<orc.baseStats.rangeOfVision)
         {
-            parent.SwitchState("Chase");
+            parent.SwitchState(OrcStateName.Chase);
             return;
         }
     }
@@ -31,11 +31,6 @@ public class PatrolOrcState : OrcState
     {
         HandleHorizontalMomentum();
     }
-    public override void ExitState()
-    {
-        
-    }
-
     protected override void HandleMoveDir()
     {
         orc.moveDir=Vector3.Normalize(targetPosition-orc.transform.position);

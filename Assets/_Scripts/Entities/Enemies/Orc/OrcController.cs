@@ -26,7 +26,7 @@ public class OrcController : EntityController
         IsGrounded=orcMover.CheckGround();;
         isFacingRight=true;
         orcStateMachine=new OrcStateMachine(this);
-        orcStateMachine.StateChanged+=orcVisual.MainStateChanged;
+        orcStateMachine.OnStateChanged+=orcVisual.MainStateChanged;
     }
 
     private void Update()
@@ -67,9 +67,9 @@ public class OrcController : EntityController
         return player.transform.position;
     }
 
-    public override void GetHit(float damage,Vector2 knockBack)
+    public override void GetHit(HitInfo hitInfo)
     {
-        base.GetHit(damage,knockBack);
+        base.GetHit(hitInfo);
         orcStateMachine.SwitchState("Hurt");
     }
 }
