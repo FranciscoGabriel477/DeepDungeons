@@ -14,9 +14,22 @@ public class PlayerState : State<PlayerState>
     }
     protected virtual void HandleHorizontalMomentum() 
     {
-        player.SetHorizontalFrameVelocity(player.moveDir.x*player.baseMoveStats.moveHorizontalSpeed);
+        player.SetHorizontalFrameVelocity(player.moveDir.x*player.stats.currentSpeed);
     }
     
+    protected virtual void HandleRotation()
+    {
+        if (player.isFacingRight && player.moveDir.x<0)
+        {
+            player.isFacingRight=false;
+            player.transform.Rotate(0,-180f,0);
+        }
+        else if(!player.isFacingRight && player.moveDir.x>0)
+        {
+            player.isFacingRight=true;
+            player.transform.Rotate(0,180f,0);
+        }
+    }
 
     public virtual bool CheckTrasitionConditions()
     {

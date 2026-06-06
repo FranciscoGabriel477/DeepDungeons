@@ -1,29 +1,17 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class WardOrcState : OrcState
+public class WardOrcState : WardState<OrcController,OrcMover,OrcVisual,OrcStats,OrcStateMachine,OrcBaseStats,OrcBaseMoveStats>
 {
-    private float currentTimeOnWard;
-    public WardOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Ward, orc){}
+    public WardOrcState(OrcStateMachine parent,OrcController orc) : base(parent, orc){}
 
     public override void EntryState()
     {
-        currentTimeOnWard=Random.Range(orc.baseStats.minWardTime,orc.baseStats.maxWardTime);
-        orc.SetHorizontalFrameVelocity(0);
+        base.EntryState();
     }
     public override void UpdateState(float deltaTime)
     {
-        currentTimeOnWard-=deltaTime;
-        if (currentTimeOnWard <= 0)
-        {
-            parent.SwitchState(OrcStateName.Patrol);
-            return;
-        }
-        if ((orc.GetPlayerPos()-orc.transform.position).magnitude<orc.baseStats.rangeOfVision)
-        {
-            parent.SwitchState(OrcStateName.Chase);
-            return;
-        }
+        base.UpdateState(deltaTime);
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {

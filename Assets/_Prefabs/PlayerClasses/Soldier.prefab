@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8589034023431852012}
   - component: {fileID: 1415401065116272962}
   - component: {fileID: 6928467849111926283}
+  - component: {fileID: 1780353696074088081}
   m_Layer: 6
   m_Name: Soldier
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 242751937225011174}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.03, y: 0, z: 0}
+  m_LocalPosition: {x: -9.73, y: 0.545, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -53,7 +54,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 832
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -71,8 +72,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1.05}
+  m_Offset: {x: 0, y: 0.225}
+  m_Size: {x: 0.5, y: 1.5}
   m_Direction: 0
 --- !u!50 &8589034023431852012
 Rigidbody2D:
@@ -113,7 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838930eedb9b8d14b92ef532bfd123d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
-  colliderHeight: 1.05
+  colliderHeight: 1.53
+  offSet: 0.225
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -129,12 +131,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ef0a2783f6d0948a17dc0defa265ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  mover: {fileID: 0}
+  visual: {fileID: 0}
+  stats: {fileID: 0}
   moveDir: {x: 0, y: 0}
   frameVelocity: {x: 0, y: 0}
   externalForce: {x: 0, y: 0}
   isFacingRight: 0
-  baseMoveStats: {fileID: 11400000, guid: e719945feb678e4459964fbe27628d8f, type: 2}
+--- !u!114 &1780353696074088081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242751937225011174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af855769657ddaf4f85af5b20064ae56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   baseStats: {fileID: 11400000, guid: 20069773bb223d748b61c44ff192f497, type: 2}
+  baseMoveStats: {fileID: 11400000, guid: e719945feb678e4459964fbe27628d8f, type: 2}
 --- !u!1 &2025155406673287424
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +163,7 @@ GameObject:
   - component: {fileID: 6657626203213330485}
   - component: {fileID: 6047398882768375642}
   - component: {fileID: 4000058468124869742}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +248,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.5, y: 0.1}
+  m_Offset: {x: 0.56813717, y: 0.4114827}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -241,7 +258,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2, y: 1.2}
+  m_Size: {x: 2.350418, y: 1.8229654}
   m_EdgeRadius: 0
 --- !u!1 &8001485202239739359
 GameObject:
@@ -271,8 +288,8 @@ Transform:
   m_GameObject: {fileID: 8001485202239739359}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.5, y: 7.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0.27, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4743730690710739186}
@@ -326,7 +343,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -7978735674136817684, guid: 2f6c2e09f24f34745a582411daf5312f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01d549e9a227ffe47935d98135611719, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -346,7 +363,7 @@ Animator:
   m_GameObject: {fileID: 8001485202239739359}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 43a7ba9b3b3d0a34f9dc8067904ee4f9, type: 2}
+  m_Controller: {fileID: 9100000, guid: d9e8b1d5333e58c42b7fbe7662b4af76, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

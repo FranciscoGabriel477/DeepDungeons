@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCharacterClass : MonoBehaviour
+public abstract class PlayerCharacterClass : MonoBehaviour
 {
     public PlayerController playerController;
     public Animator classAnimator{get; protected set;}
@@ -14,4 +14,6 @@ public class PlayerCharacterClass : MonoBehaviour
             attackStateMachine.SwitchState("NotAttack");
         }
     }
+
+    public abstract float GetStaminaAttackCost();
 }

@@ -1,33 +1,39 @@
 using System;
 using UnityEngine;
 
-public class OrcVisual : EntityVisual
+public class OrcVisual : EnemyVisual
 {
     public event EventHandler OnInitiateOfAttackAnimation;
 
-    public void MainStateChanged(object sender,StateMachine<OrcState>.StateChangeInfo stateChangeInfo)
+    public override void MainStateChanged(object sender,StateMachine<EnemyState>.StateChangeInfo stateChangeInfo)
     {
-        mainStateName=stateChangeInfo.newState.stateName;
+        base.MainStateChanged(sender,stateChangeInfo);
         switch (mainStateName)
         {
-            case "Ward":
+            case OrcStateName.Ward:
             animator.Play("Idle");
             break;
 
-            case "Patrol":
+            case OrcStateName.Patrol:
             animator.Play("Walk");
             break;
 
-            case "Chase":
+            case OrcStateName.Chase:
             animator.Play("Walk");
             break;
 
-            case "Attack":
+            case OrcStateName.Attack:
             animator.Play("Attack");
             break;
 
-            case "Hurt":
+            case OrcStateName.Hurt:
             animator.Play("Hurt");
+            break;
+            case OrcStateName.Cooling:
+            animator.Play("Idle");
+            break;
+            case OrcStateName.GoBack:
+            animator.Play("Walk");
             break;
 
             default:
@@ -38,6 +44,4 @@ public class OrcVisual : EntityVisual
     {
         OnInitiateOfAttackAnimation?.Invoke(this,EventArgs.Empty);
     }
-
-    
 }

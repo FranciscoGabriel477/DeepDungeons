@@ -30,13 +30,26 @@ public class SoldierClass : PlayerCharacterClass
     {
         attackStateMachine=new ClassAttackStateMachine(playerController);
         attackStateMachine.RegisterState(new MeeleAttackState1(attackStateMachine,playerController));
+        attackStateMachine.RegisterState(new AirMeeleAttackState(attackStateMachine,playerController));
     }
     public override void HandleAttack()
     {
         
         if (attackStateMachine.GetActualStateName() == "NotAttack")
         {
-            attackStateMachine.SwitchState(SoldierAttackName.MeeleAttack1);
+            if (playerController.IsGrounded)
+            {
+                attackStateMachine.SwitchState(SoldierAttackName.MeeleAttack1);
+            }
+            else
+            {
+                attackStateMachine.SwitchState(SoldierAttackName.AirMeeleAttack);
+            }
         }
+    }
+
+    public override float GetStaminaAttackCost()
+    {
+        return weaponInfo.staminaCostOnMeele1;
     }
 }

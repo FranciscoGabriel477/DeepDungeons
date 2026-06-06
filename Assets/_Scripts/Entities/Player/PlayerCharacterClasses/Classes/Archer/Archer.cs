@@ -45,4 +45,9 @@ public class ArcherClass : PlayerCharacterClass
         PlayerArrow arrow=arrowGameObject.GetComponent<PlayerArrow>();
         arrow.direction=dir==0?Vector2.right:Vector2.left;
     }
+
+    public override float GetStaminaAttackCost()
+    {
+        return weaponInfo.staminaCostOnRange1;
+    }
 }

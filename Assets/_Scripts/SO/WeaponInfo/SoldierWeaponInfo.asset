@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b744c912ffc654ea271ae707bcb50c, type: 3}
   m_Name: SoldierWeaponInfo
   m_EditorClassIdentifier: Assembly-CSharp::SoldierWeaponInfo
-  damage: 3
+  damage: 20
   knockBackImpulse: 10
-  attackTimeOnMeele1: 0.5
+  attackTimeOnMeele1: 0.667
+  staminaCostOnMeele1: 30

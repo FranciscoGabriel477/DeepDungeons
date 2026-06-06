@@ -12,8 +12,12 @@ public class HurtPlayerState : PlayerState
 
     public override void EntryState()
     {
-        actualTime=player.baseStats.timeInHurtState;
+        actualTime=player.stats.baseStats.timeInHurtState;
         player.SetHorizontalFrameVelocity(0);
+        if (!player.IsGrounded)
+        {
+            player.playerAirControlStateMachine.SwitchState(PlayerAirStateName.FastFall);
+        }
     }
     public override void UpdateState(float deltaTime)
     {

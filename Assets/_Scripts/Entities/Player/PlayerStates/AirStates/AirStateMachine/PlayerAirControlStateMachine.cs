@@ -10,6 +10,7 @@ public class PlayerAirControlStateMachine : StateMachine<PlayerAirState>
         RegisterState(new FallPlayerState(this,playerController));
         RegisterState(new FastFallPlayerState(this,playerController));
         RegisterState(new FastFallTransitionPlayerState(this,playerController));
+        RegisterState(new SuspendPlayerState(this,playerController));
         SwitchState("NotInAir");
     }
 }

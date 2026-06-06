@@ -1,63 +1,70 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-
 [RequireComponent(typeof(PlayerMover))]
-public class PlayerController : EntityController
+
+[RequireComponent(typeof(PlayerStats))]
+public class PlayerController : EntityController<PlayerMover,PlayerCharacterClassVisual,PlayerStats,PlayerBaseStats,PlayerBaseMoveStats>
 {
-    public PlayerMover playerMover{get; private set;} 
-    public PlayerCharacterClassVisual playerVisual{get; private set;}  
     public PlayerCharacterClass characterClass{get; private set;}  
     public GameInput gameInput{get; private set;}
-    public PlayerBaseMoveStats baseMoveStats;
-    public PlayerBaseStats baseStats;
     public PlayerStateMachine playerStateMachine{get; private set;}
     public PlayerAirControlStateMachine playerAirControlStateMachine{get; private set;}
-    private float currentTimerJumpBuffer=0;
+    public Collider2D playerHitBox;
     public bool jumpIsPressed{get; private set;}
     public bool jumpIsHelded{get; private set;}
-    public void Awake()
+    public float currentTimerJumpBuffer{get; private set;}
+    public float currentTimerDashCoolDown{get; private set;}
+    public float currentTimerBlockCoolDown{get; private set;}
+    protected override void Awake()
     {
         
-        playerMover=GetComponent<PlayerMover>();
-        playerVisual=GetComponentInChildren<PlayerCharacterClassVisual>();
+        base.Awake();
         characterClass=GetComponentInChildren<PlayerCharacterClass>();
         
     }
 
-    private void Start()
+    protected override void Start()
     {
-        SetupGameInput();
-        IsGrounded=playerMover.CheckGround();
+        base.Start();
         isFacingRight=true;
-        playerStateMachine= new PlayerStateMachine(this);
-        playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
-        playerStateMachine.OnStateChanged += playerVisual.MainStateChanged;
-        playerAirControlStateMachine.OnStateChanged += playerVisual.AirStateChanged;
+        currentTimerJumpBuffer=0;
+        currentTimerDashCoolDown=0;
+        currentTimerBlockCoolDown=0;
+        SetupGameInput();
+        SetupStateMachine();
+        
     }
 
+    private void SetupStateMachine()
+    {
+        playerStateMachine= new PlayerStateMachine(this);
+        playerAirControlStateMachine= new PlayerAirControlStateMachine(this);
+        playerStateMachine.OnStateChanged += visual.MainStateChanged;
+        playerAirControlStateMachine.OnStateChanged += visual.AirStateChanged;
+    }
     public void Update()
     {
         CountTimers();
-        HandleMoveDir();
+        GetInputMoveDir();
+        HandleEffects();
         playerStateMachine.Action(Time.deltaTime);
         playerAirControlStateMachine.Action(Time.deltaTime);
-        //Debug.Log(playerStateMachine.GetActualStateName());
     }
 
     public void FixedUpdate()
     {
-        externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,baseMoveStats.knockBackDecelaration*Time.fixedDeltaTime);
-        IsGrounded=playerMover.CheckGround();
-
-        if (playerStateMachine.AllowsRotate())
-        {
-            HandleRotation();
-        }
+        HandleExternalForces();
+        IsGrounded=mover.CheckGround();
         playerStateMachine.FixedAction(Time.fixedDeltaTime);
         playerAirControlStateMachine.FixedAction(Time.fixedDeltaTime);
         Move();
     }
 
+    protected override void HandleExternalForces()
+    {
+        externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,stats.baseMoveStats.knockBackDecelaration*Time.fixedDeltaTime);
+    }
     public void OnDestroy()
     {
         DisabelGameInput();
@@ -65,10 +72,20 @@ public class PlayerController : EntityController
     private void CountTimers()
     {
         currentTimerJumpBuffer=Math.Max(0,currentTimerJumpBuffer-Time.deltaTime);
+        currentTimerDashCoolDown=Math.Max(0,currentTimerDashCoolDown-Time.deltaTime);
+        currentTimerBlockCoolDown=Math.Max(0,currentTimerBlockCoolDown-Time.deltaTime);
     }
     public void ResetJumpBuffer()
     {
         currentTimerJumpBuffer=0;
+    }
+    public void ResetDashCooldown()
+    {
+        currentTimerDashCoolDown=stats.baseMoveStats.dashCooldown;
+    }
+    public void ResetBlockCooldown()
+    {
+        currentTimerBlockCoolDown=stats.baseStats.blockCooldown;
     }
     public bool CheckJumpConditions()
     {
@@ -76,7 +93,7 @@ public class PlayerController : EntityController
     }
     public void Move()
     {
-        playerMover.SetVelocity(frameVelocity+externalForce);
+        mover.SetVelocity(frameVelocity+externalForce);
     }
 
     public override void SetHorizontalFrameVelocity(float newVelocityDirX)
@@ -87,27 +104,14 @@ public class PlayerController : EntityController
     public override void SetVerticalFrameVelocity(float newVelocityY)
     {
         frameVelocity.y=newVelocityY;
-        frameVelocity.y=Math.Clamp(frameVelocity.y,-baseMoveStats.maxVerticalSpeed,baseMoveStats.maxVerticalSpeed);
-    }
-    protected virtual void HandleRotation()
-    {
-        if (isFacingRight && moveDir.x<0)
-        {
-            isFacingRight=false;
-            transform.Rotate(0,-180f,0);
-        }  
-        else if(!isFacingRight && moveDir.x>0)
-        {
-            isFacingRight=true;
-            transform.Rotate(0,180f,0);
-        }
+        frameVelocity.y=Math.Clamp(frameVelocity.y,-stats.baseMoveStats.maxVerticalSpeed,stats.baseMoveStats.maxVerticalSpeed);
     }
 
-    protected virtual void HandleMoveDir()
+    public virtual void GetInputMoveDir()
     {
         moveDir=gameInput.GetNormalizedMovementInput();
     }
-     public void AttackPressed(object sender, EventArgs e)
+    public void AttackPressed(object sender, EventArgs e)
     {
         if (playerStateMachine.GetState(PlayerStateName.Attack).CheckTrasitionConditions())
         {
@@ -124,7 +128,7 @@ public class PlayerController : EntityController
     }
     public void JumpPressed(object sender, EventArgs e)
     {
-        currentTimerJumpBuffer=baseMoveStats.jumpBufferTimer;   
+        currentTimerJumpBuffer=stats.baseMoveStats.jumpBufferTimer;   
         jumpIsHelded=false;
         jumpIsPressed=true;
     }
@@ -168,10 +172,13 @@ public class PlayerController : EntityController
             if (blockPlayerState.TryBlock(hitInfo))
             {
                 Debug.Log("Defendeu");
+                externalForce+=hitInfo.knockBack/2;
+                externalForce=Vector2.ClampMagnitude(externalForce,stats.baseMoveStats.maxKnockBack);
                 return;
             }
         }
         base.GetHit(hitInfo);
+        stats.TakeDamage(hitInfo.damage);
         playerStateMachine.SwitchState(PlayerStateName.Hurt);
     }
 

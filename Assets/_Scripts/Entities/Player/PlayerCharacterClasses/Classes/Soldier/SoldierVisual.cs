@@ -7,6 +7,22 @@ public class SoldierVisual : PlayerCharacterClassVisual
     public override void MainStateChanged(object sender,StateMachine<PlayerState>.StateChangeInfo stateChangeInfo)
     {
         mainStateName=stateChangeInfo.newState.stateName;
+        if (airStateName!= PlayerAirStateName.NotInAir && airStateName!=null)
+        {
+            switch (mainStateName)
+            {
+                case PlayerStateName.Hurt:
+                    animator.Play("Hurt");
+                break;
+                case PlayerStateName.Attack:
+                    animator.Play("AirAttack");
+                break;
+                case PlayerStateName.Dash:
+                    animator.Play("AirDash");
+                break;
+            }
+            return;
+        }
         switch (mainStateName)
         {
             case PlayerStateName.Idle:
@@ -23,6 +39,12 @@ public class SoldierVisual : PlayerCharacterClassVisual
 
             case PlayerStateName.Hurt:
                 animator.Play(PlayerStateName.Hurt);
+                break;
+            case PlayerStateName.Dash:
+                animator.Play(PlayerStateName.Dash);
+                break;
+            case PlayerStateName.Block:
+                animator.Play(PlayerStateName.Block);
                 break;
             
             default:

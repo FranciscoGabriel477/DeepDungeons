@@ -16,6 +16,7 @@ public class IdlePlayerState : PlayerState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        HandleRotation();
         HandleHorizontalMomentum();
     }
 }

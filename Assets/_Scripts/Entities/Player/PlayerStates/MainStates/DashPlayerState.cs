@@ -13,7 +13,9 @@ public class DashPlayerState : PlayerState
 
     public override void EntryState()
     {
-        actualTime=player.baseMoveStats.timeInDashState;
+        player.stats.ConsumeStamina(player.stats.baseMoveStats.dashStaminaCost);
+        player.playerHitBox.enabled=false;
+        actualTime=player.stats.baseMoveStats.timeInDashState;
         float dashDir;
         if (player.moveDir.x != 0)
         {
@@ -23,7 +25,12 @@ public class DashPlayerState : PlayerState
         {
             dashDir=player.transform.rotation.eulerAngles.y==0?1f:-1f;
         }
-        player.SetHorizontalFrameVelocity(dashDir*player.baseMoveStats.dashSpeed);
+        player.SetHorizontalFrameVelocity(dashDir*player.stats.baseMoveStats.dashSpeed);
+
+        if (!player.IsGrounded)
+        {
+            player.playerAirControlStateMachine.SwitchState(PlayerAirStateName.Suspend);
+        }
     }
     public override void UpdateState(float deltaTime)
     {
@@ -35,8 +42,25 @@ public class DashPlayerState : PlayerState
         }
     }
 
+    public override void ExitState()
+    {
+        player.playerHitBox.enabled=true;
+        player.ResetDashCooldown();
+        if (player.playerAirControlStateMachine.GetActualStateName()==PlayerAirStateName.Suspend)
+        {
+            if (!player.IsGrounded)
+            {
+                player.playerAirControlStateMachine.SwitchState(PlayerAirStateName.FastFall);
+            }
+            else
+            {
+                player.playerAirControlStateMachine.SwitchState(PlayerAirStateName.NotInAir);
+            }
+        }
+    }
+
     public override bool CheckTrasitionConditions()
     {
-        return parent.AllowsTransition(PlayerStateName.Dash);
+        return parent.AllowsTransition(PlayerStateName.Dash) && player.currentTimerDashCoolDown==0 && player.stats.currentStamina>=player.stats.baseMoveStats.dashStaminaCost;
     }
 }

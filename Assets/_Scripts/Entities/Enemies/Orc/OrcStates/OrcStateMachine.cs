@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class OrcStateMachine : StateMachine<OrcState>
+public class OrcStateMachine : EnemyStateMachine
 {
     public OrcStateMachine(OrcController orcController)
     {
@@ -9,6 +9,8 @@ public class OrcStateMachine : StateMachine<OrcState>
         RegisterState(new ChaseOrcState(this,orcController));
         RegisterState(new AttackOrcState(this,orcController));
         RegisterState(new HurtOrcState(this,orcController));
-        SwitchState("Ward");
+        RegisterState(new GoBackOrcState(this,orcController));
+        RegisterState(new CoolingOrcState(this,orcController));
+        SwitchState(OrcStateName.Ward);
     }
 }

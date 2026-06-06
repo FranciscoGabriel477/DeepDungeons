@@ -22,11 +22,12 @@ public class BlockPlayerState : PlayerState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
-        
+        HandleRotation();
     }
     public override void ExitState()
     {
         gameInput.OnBlockReleased-=BlockRealeased;
+        player.ResetBlockCooldown();
     }
 
     public bool TryBlock(HitInfo hitInfo)
@@ -35,7 +36,7 @@ public class BlockPlayerState : PlayerState
     }
     public override bool CheckTrasitionConditions()
     {
-        return player.IsGrounded && parent.AllowsTransition(PlayerStateName.Block);
+        return player.IsGrounded && parent.AllowsTransition(PlayerStateName.Block) && player.currentTimerBlockCoolDown==0;
     }
 
     public void BlockRealeased(object sender, EventArgs e)

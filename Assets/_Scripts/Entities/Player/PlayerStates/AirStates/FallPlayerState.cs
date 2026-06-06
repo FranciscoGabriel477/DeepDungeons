@@ -19,7 +19,7 @@ public class FallPlayerState : PlayerAirState
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
-        float newVelocityY=player.frameVelocity.y+player.baseMoveStats.gravityAcc*fixedDeltaTime;
+        float newVelocityY=player.frameVelocity.y+player.stats.baseMoveStats.gravityAcc*fixedDeltaTime;
         player.SetVerticalFrameVelocity(newVelocityY);
     }
 

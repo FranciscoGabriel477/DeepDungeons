@@ -1,4 +1,6 @@
 using UnityEngine;
 
-public class OrcMover : EntityMover
-{}
+public class OrcMover : EnemyMover
+{
+    
+}

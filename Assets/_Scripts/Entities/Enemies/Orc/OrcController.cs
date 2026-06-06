@@ -1,75 +1,48 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
-
 [RequireComponent(typeof(OrcMover))]
-public class OrcController : EntityController
-{
-    public OrcMover orcMover{get; private set;} 
-    public OrcVisual orcVisual{get; private set;}
-    public OrcBaseStats baseStats;
-    public OrcWeapon orcWeapon;
-    private OrcStateMachine orcStateMachine;
-    public PlayerController player;    
-    public Vector3 wardPosition;
-    private void Awake()
-    {
-        orcMover=GetComponent<OrcMover>();
-        orcVisual=GetComponentInChildren<OrcVisual>();
-        orcWeapon=GetComponentInChildren<OrcWeapon>();
-        player=FindFirstObjectByType<PlayerController>();
-        wardPosition=transform.position;
-    }
 
-    private void Start()
+[RequireComponent(typeof(OrcStats))]
+public class OrcController : EnemyController<OrcMover,OrcVisual,OrcStats,OrcStateMachine,OrcBaseStats,OrcBaseMoveStats>
+{
+    public OrcWeapon orcWeapon;
+
+    protected override void Awake()
     {
-        moveDir=Vector2.zero;
-        IsGrounded=orcMover.CheckGround();;
-        isFacingRight=true;
-        orcStateMachine=new OrcStateMachine(this);
-        orcStateMachine.OnStateChanged+=orcVisual.MainStateChanged;
+        base.Awake();
+        orcWeapon=GetComponentInChildren<OrcWeapon>();
+    }
+    protected override void Start()
+    {
+        base.Start();
+        enemyStateMachine=new OrcStateMachine(this);
+        enemyStateMachine.OnStateChanged+=visual.MainStateChanged;
     }
 
     private void Update()
     {
-        orcStateMachine.Action(Time.deltaTime);
+        ShowDebugRays();
+        enemyStateMachine.Action(Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
-        orcStateMachine.FixedAction(Time.fixedDeltaTime);
-        //Debug.Log(orcStateMachine.GetActualStateName());
-        externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,baseStats.decelaration*Time.fixedDeltaTime);
-        HandleRotation();
+        IsGrounded=mover.CheckGround();
+        enemyStateMachine.FixedAction(Time.fixedDeltaTime);
+        HandleExternalForces();
         Move();
-    }
-
-    public void Move()
-    {
-        orcMover.SetVelocity(frameVelocity+externalForce);
-    }
-
-    protected virtual void HandleRotation()
-    {
-        if (isFacingRight && moveDir.x<0)
-        {
-            isFacingRight=false;
-            transform.Rotate(0,-180f,0);
-        }
-        else if(!isFacingRight && moveDir.x>0)
-        {
-            isFacingRight=true;
-            transform.Rotate(0,180f,0);
-        }
-    }
-
-    public Vector3 GetPlayerPos()
-    {
-        return player.transform.position;
     }
 
     public override void GetHit(HitInfo hitInfo)
     {
         base.GetHit(hitInfo);
-        orcStateMachine.SwitchState("Hurt");
+        enemyStateMachine.SwitchState(OrcStateName.Hurt);
+        stats.TakeDamage(hitInfo.damage);
+    }
+    protected override void OnDie(object sender, EventArgs e)
+    {
+        base.OnDie(sender,e);
+        Destroy(orcWeapon);
     }
 }

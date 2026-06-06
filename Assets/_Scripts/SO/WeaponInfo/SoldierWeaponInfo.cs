@@ -5,4 +5,5 @@ using UnityEngine;
 public class SoldierWeaponInfo : WeaponInfo
 {
     public float attackTimeOnMeele1;
+    public float staminaCostOnMeele1;
 }

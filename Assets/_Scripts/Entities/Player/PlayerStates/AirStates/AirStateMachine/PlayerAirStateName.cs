@@ -1,9 +1,10 @@
 public static class PlayerAirStateName
 {
-    public static string NotInAir ="NotInAir";
-    public static string Fall ="Fall";
-    public static string FastFall ="FastFall";
-    public static string FastFallTransition ="FastFallTransition";
-    public static string Jump ="Jump";
-    public static string JumpApex ="JumpApex";
+    public const string NotInAir ="NotInAir";
+    public const string Fall ="Fall";
+    public const string FastFall ="FastFall";
+    public const string FastFallTransition ="FastFallTransition";
+    public const string Jump ="Jump";
+    public const string JumpApex ="JumpApex";
+    public const string Suspend ="Suspend";
 }

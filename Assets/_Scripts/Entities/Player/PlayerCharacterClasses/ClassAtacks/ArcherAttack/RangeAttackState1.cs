@@ -6,7 +6,11 @@ using UnityEngine;
 public class RangeAttackState1 : ArcherAttackState
 {
     float actualTime;
-    public RangeAttackState1(ClassAttackStateMachine parent,PlayerController player) : base(parent, ArcherAttackName.RangeAttack1,player){}
+    public RangeAttackState1(ClassAttackStateMachine parent,PlayerController player) : base(parent, ArcherAttackName.RangeAttack1, player)
+    {
+        notAllowedActions= new HashSet<string>{PlayerActionName.Jump,PlayerActionName.Rotate};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack,PlayerStateName.Block};
+    }
     public override void EntryState()
     {
         player.SetHorizontalFrameVelocity(0);

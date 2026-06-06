@@ -7,19 +7,19 @@ public class JumpPlayerState : PlayerAirState
     public JumpPlayerState(PlayerAirControlStateMachine parent,PlayerController player) : base(parent,PlayerAirStateName.Jump,player){}
     public override void EntryState()
     {
-        player.SetVerticalFrameVelocity(player.baseMoveStats.jumpInitialSpeed);
+        player.SetVerticalFrameVelocity(player.stats.baseMoveStats.jumpInitialSpeed);
         player.ResetJumpBuffer();
     }
 
     public override void UpdateState(float deltaTime)
     {
-        if(Mathf.InverseLerp(player.baseMoveStats.jumpInitialSpeed,0f,player.frameVelocity.y)>player.baseMoveStats.apexThresHold)
+        if(Mathf.InverseLerp(player.stats.baseMoveStats.jumpInitialSpeed,0f,player.frameVelocity.y)>player.stats.baseMoveStats.apexThresHold)
         {
             parent.SwitchState(PlayerAirStateName.JumpApex);
             return;
         }
 
-        if(player.jumpIsHelded && player.frameVelocity.y < player.baseMoveStats.minVerticalJumpVelocity)
+        if(player.jumpIsHelded && player.frameVelocity.y < player.stats.baseMoveStats.minVerticalJumpVelocity)
         {
             parent.SwitchState(PlayerAirStateName.FastFallTransition);
             return;
@@ -31,11 +31,11 @@ public class JumpPlayerState : PlayerAirState
             return;
         }
 
-        if(!player.playerStateMachine.AllowsJump())
+        /*if(!player.playerStateMachine.AllowsJump())
         {
             parent.SwitchState(PlayerAirStateName.FastFall);
             return;
-        }
+        }*/
 
 
     }
@@ -46,7 +46,7 @@ public class JumpPlayerState : PlayerAirState
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
-        float newVelocityY=player.frameVelocity.y+player.baseMoveStats.gravityAcc*fixedDeltaTime;
+        float newVelocityY=player.frameVelocity.y+player.stats.baseMoveStats.gravityAcc*fixedDeltaTime;
         player.SetVerticalFrameVelocity(newVelocityY);
     }
 

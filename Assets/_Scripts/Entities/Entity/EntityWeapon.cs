@@ -5,10 +5,8 @@ public class EntityWeapon : MonoBehaviour
     public Collider2D weaponCollider;
     public WeaponInfo weaponInfo;
     public ContactFilter2D contactFilter;
-    //public LayerMask targetLayer;
-    private void Start()
+    protected virtual void Start()
     {
-        //contactFilter.SetLayerMask(targetLayer);
         contactFilter.useLayerMask=true;
     }
     public virtual void Attack(float dir)
@@ -20,5 +18,10 @@ public class EntityWeapon : MonoBehaviour
             Vector2 KnockBackDir=transform.position.x-enemiesHitted[0].transform.position.x<0?Vector2.right:Vector2.left;
             enemiesHitted[0].collider.gameObject.GetComponent<IHitable>().GetHit(new HitInfo{damage=weaponInfo.damage, knockBack=KnockBackDir*weaponInfo.knockBackImpulse,posOrigin=transform.position});
         }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        Destroy(gameObject);
     }
 }

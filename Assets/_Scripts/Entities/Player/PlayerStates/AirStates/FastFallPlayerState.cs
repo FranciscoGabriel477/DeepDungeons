@@ -18,7 +18,7 @@ public class FastFallPlayerState : PlayerAirState
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
-        float newVelocityY=player.frameVelocity.y+player.baseMoveStats.gravityAcc*fixedDeltaTime*player.baseMoveStats.gravityMultiplierOnJumpRelease;
+        float newVelocityY=player.frameVelocity.y+player.stats.baseMoveStats.gravityAcc*fixedDeltaTime*player.stats.baseMoveStats.gravityMultiplierOnJumpRelease;
         player.SetVerticalFrameVelocity(newVelocityY);
     }
 }

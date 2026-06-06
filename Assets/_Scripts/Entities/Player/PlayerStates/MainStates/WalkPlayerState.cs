@@ -13,6 +13,7 @@ public class WalkPlayerState : PlayerState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        HandleRotation();
         HandleHorizontalMomentum();
     }
 }

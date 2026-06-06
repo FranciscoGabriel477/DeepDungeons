@@ -17,9 +17,4 @@ public class PlayerStateMachine : StateMachine<PlayerState>
     {
         return !currentState.notAllowedActions.Contains(PlayerActionName.Jump);
     }
-
-    public bool AllowsRotate()
-    {
-        return !currentState.notAllowedActions.Contains(PlayerActionName.Rotate);
-    }
 }

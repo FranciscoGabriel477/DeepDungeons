@@ -6,7 +6,7 @@ public class JumpApexPlayerState : PlayerAirState
     public override void EntryState()
     {
         player.SetVerticalFrameVelocity(0f);
-        TimerHandler.CreateTimer(EndOfApexTime,player.baseMoveStats.timeInApexPoint,"ApexTimer");
+        TimerHandler.CreateTimer(EndOfApexTime,player.stats.baseMoveStats.timeInApexPoint,"ApexTimer");
     }
 
     public override void UpdateState(float deltaTime)

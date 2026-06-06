@@ -4,16 +4,13 @@ using UnityEngine;
 public class AttackOrcState : OrcState
 {
     private float actualTime;
-    public AttackOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Attack, orc)
-    {
-        
-    }
+    public AttackOrcState(OrcStateMachine parent,OrcController orc) : base(parent, OrcStateName.Attack, orc){}
 
     public override void EntryState()
     {
         orc.SetHorizontalFrameVelocity(0);
-        actualTime=orc.baseStats.attackTime;
-        orc.orcVisual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
+        actualTime=orc.stats.baseStats.attackTime;
+        orc.visual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
 
     }
     public override void UpdateState(float deltaTime)
@@ -22,7 +19,7 @@ public class AttackOrcState : OrcState
         actualTime-=deltaTime;
         if (actualTime <= 0)
         {
-            parent.SwitchState(OrcStateName.Chase);
+            parent.SwitchState(OrcStateName.Cooling);
             return;
         }
     }
@@ -32,11 +29,8 @@ public class AttackOrcState : OrcState
     }
     public override void ExitState()
     {
-        orc.orcVisual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
-        
-    }
-
-    
+        orc.visual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
+    }   
     private void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
         orc.orcWeapon.Attack(orc.transform.rotation.eulerAngles.y);

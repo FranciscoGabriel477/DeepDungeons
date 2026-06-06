@@ -15,4 +15,5 @@ MonoBehaviour:
   damage: 8
   knockBackImpulse: 10
   attackTimeOnRange1: 0.75
+  staminaCostOnRange1: 30
   ammoType: {fileID: 5442447213475078058, guid: cc00cda40fc3da04b955578e1194e7b7, type: 3}

@@ -8,7 +8,7 @@ public class FastFallTransitionPlayerState : PlayerAirState
     public override void EntryState()
     {
         verticalVelocityInJumpHeld=player.frameVelocity.y;
-        currentTimerInFastFallingTrasition=player.baseMoveStats.timeInFastFallingTrasition;
+        currentTimerInFastFallingTrasition=player.stats.baseMoveStats.timeInFastFallingTrasition;
     }
 
     public override void UpdateState(float deltaTime)
@@ -34,7 +34,7 @@ public class FastFallTransitionPlayerState : PlayerAirState
 
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
-        float newVelocityY=Mathf.Lerp(verticalVelocityInJumpHeld,0,(player.baseMoveStats.timeInFastFallingTrasition-currentTimerInFastFallingTrasition)/player.baseMoveStats.timeInFastFallingTrasition);
+        float newVelocityY=Mathf.Lerp(verticalVelocityInJumpHeld,0,(player.stats.baseMoveStats.timeInFastFallingTrasition-currentTimerInFastFallingTrasition)/player.stats.baseMoveStats.timeInFastFallingTrasition);
         player.SetVerticalFrameVelocity(newVelocityY);
     }
 
