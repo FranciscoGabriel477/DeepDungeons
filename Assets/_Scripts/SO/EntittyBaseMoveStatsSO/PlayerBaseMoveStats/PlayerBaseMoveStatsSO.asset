@@ -20,7 +20,7 @@ MonoBehaviour:
   timeInDashState: 0.4585
   jumpHeight: 2
   minJumpHeight: 0.5
-  maxVerticalSpeed: 50
+  maxVerticalSpeed: 15
   gravityMultiplierOnJumpRelease: 2.5
   apexThresHold: 0.97
   timeInApexPoint: 0.05
