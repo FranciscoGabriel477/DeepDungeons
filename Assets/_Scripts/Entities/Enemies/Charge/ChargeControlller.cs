@@ -20,8 +20,9 @@ public class ChargeController : EnemyController<ChargeMover,ChargeVisual,ChargeS
         enemyStateMachine.OnStateChanged+=visual.MainStateChanged;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowDebugRays();
         enemyStateMachine.Action(Time.deltaTime);
     }
@@ -34,12 +35,12 @@ public class ChargeController : EnemyController<ChargeMover,ChargeVisual,ChargeS
         Move();
     }
 
-    public override void GetHit(HitInfo hitInfo)
+    /*public override void GetHit(HitInfo hitInfo)
     {
         base.GetHit(hitInfo);
         enemyStateMachine.SwitchState(ChargeStateName.Hurt);
         stats.TakeDamage(hitInfo.damage);
-    }
+    }*/
     protected override void OnDie(object sender, EventArgs e)
     {
         base.OnDie(sender,e);

@@ -1,27 +1,35 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 [RequireComponent(typeof(PlayerMover))]
 
 [RequireComponent(typeof(PlayerStats))]
 public class PlayerController : EntityController<PlayerMover,PlayerCharacterClassVisual,PlayerStats,PlayerBaseStats,PlayerBaseMoveStats>
 {
-    public PlayerCharacterClass characterClass{get; private set;}  
-    public GameInput gameInput{get; private set;}
-    public PlayerStateMachine playerStateMachine{get; private set;}
-    public PlayerAirControlStateMachine playerAirControlStateMachine{get; private set;}
-    public Collider2D playerHitBox;
+    [HideInInspector] public PlayerCharacterClass characterClass{get; private set;}  
+    [HideInInspector] public GameInput gameInput{get; private set;}
+    [HideInInspector] public PlayerStateMachine playerStateMachine{get; private set;}
+    [HideInInspector] public PlayerAirControlStateMachine playerAirControlStateMachine{get; private set;}
+    [HideInInspector] public PlayerHitBox playerHitBox;
     public bool jumpIsPressed{get; private set;}
     public bool jumpIsHelded{get; private set;}
     public float currentTimerJumpBuffer{get; private set;}
     public float currentTimerDashCoolDown{get; private set;}
     public float currentTimerBlockCoolDown{get; private set;}
+    public float currentInvencibilityTime{get; private set;}
+    public string skillSlot1;
+    public string skillSlot2;
+    public float currentSkill1Cooldown;
+    public float currentSkill2Cooldown;
+    public int currentSkillPressed;
+    public Vector3 checkPoint;
     protected override void Awake()
     {
-        
         base.Awake();
         characterClass=GetComponentInChildren<PlayerCharacterClass>();
-        
+        playerHitBox=GetComponentInChildren<PlayerHitBox>();
+        GameManager.instance.player=this;       // TIRE ISSO DEPOISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs
     }
 
     protected override void Start()
@@ -31,9 +39,15 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         currentTimerJumpBuffer=0;
         currentTimerDashCoolDown=0;
         currentTimerBlockCoolDown=0;
+        currentInvencibilityTime=0;
+        currentSkill1Cooldown=0;
+        currentSkill2Cooldown=0;
         SetupGameInput();
         SetupStateMachine();
-        
+        playerHitBox.OnHit+=Hitted;
+        //HUDManager.instance.OnSkillSelected+=GetNewSkill;
+        stats.OnDeath+=Dead;
+
     }
 
     private void SetupStateMachine()
@@ -48,6 +62,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         CountTimers();
         GetInputMoveDir();
         HandleEffects();
+        playerHitBox.HandleHitBox(playerStateMachine.currentState.invencible || currentInvencibilityTime>0);
         playerStateMachine.Action(Time.deltaTime);
         playerAirControlStateMachine.Action(Time.deltaTime);
     }
@@ -56,6 +71,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     {
         HandleExternalForces();
         IsGrounded=mover.CheckGround();
+        IsHeadBump=mover.CheckforHeadBump();
         playerStateMachine.FixedAction(Time.fixedDeltaTime);
         playerAirControlStateMachine.FixedAction(Time.fixedDeltaTime);
         Move();
@@ -74,6 +90,18 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         currentTimerJumpBuffer=Math.Max(0,currentTimerJumpBuffer-Time.deltaTime);
         currentTimerDashCoolDown=Math.Max(0,currentTimerDashCoolDown-Time.deltaTime);
         currentTimerBlockCoolDown=Math.Max(0,currentTimerBlockCoolDown-Time.deltaTime);
+        currentInvencibilityTime=Math.Max(0,currentInvencibilityTime-Time.deltaTime);
+        currentSkill1Cooldown=Math.Max(0,currentSkill1Cooldown-Time.deltaTime);
+        currentSkill2Cooldown=Math.Max(0,currentSkill2Cooldown-Time.deltaTime);
+        if (skillSlot1 != "")
+        {
+            HUDManager.instance.skillSlot1Cooldown.fillAmount=currentSkill1Cooldown/characterClass.skillS[skillSlot1].cooldown;
+        }
+        if (skillSlot2 != "")
+        {
+            HUDManager.instance.skillSlot2Cooldown.fillAmount=currentSkill2Cooldown/characterClass.skillS[skillSlot2].cooldown;
+        }
+        
     }
     public void ResetJumpBuffer()
     {
@@ -118,7 +146,66 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
             playerStateMachine.SwitchState(PlayerStateName.Attack);
         }
     }
+    public void Skill1Pressed(object sender, EventArgs e)
+    {
+        currentSkillPressed=1;
+        if (skillSlot1 == "")
+        {
+            return;
+        }
+        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && currentSkill1Cooldown<=0)
+        {
+            playerStateMachine.SwitchState(PlayerStateName.SkillCast);
+        }
+    }
+    public void Skill2Pressed(object sender, EventArgs e)
+    {
+        currentSkillPressed=2;
+        if (skillSlot2 == "")
+        {
+            return;
+        }
+        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && currentSkill2Cooldown<=0)
+        {
+            playerStateMachine.SwitchState(PlayerStateName.SkillCast);
+        }
+    }
 
+    public void GetNewSkill(object sender, HUDManager.SkillInfoSelected skillInfoSelected)
+    {
+        int slot;
+        if (skillInfoSelected.slot == 0)
+        {
+            if (skillSlot1 == "")
+            {
+                slot=1;
+            }
+            else if(skillSlot2=="")
+            {
+                slot=2;
+            }
+            else
+            {
+                slot=1;
+            }
+        }
+        else
+        {
+            slot=skillInfoSelected.slot;
+        }
+        if (slot == 1)
+        {
+            HUDManager.instance.skillSlot1.sprite=skillInfoSelected.skillinfo.UIinfo.skillSprite;
+            HUDManager.instance.skillSlot1Cooldown.sprite=skillInfoSelected.skillinfo.UIinfo.skillSprite;
+            skillSlot1=skillInfoSelected.skillinfo.skillName;
+        }
+        else
+        {
+            HUDManager.instance.skillSlot2.sprite=skillInfoSelected.skillinfo.UIinfo.skillSprite;
+            HUDManager.instance.skillSlot2Cooldown.sprite=skillInfoSelected.skillinfo.UIinfo.skillSprite;
+            skillSlot2=skillInfoSelected.skillinfo.skillName;
+        }
+    }
     public void DashPressed(object sender, EventArgs e)
     {
         if (playerStateMachine.GetState(PlayerStateName.Dash).CheckTrasitionConditions())
@@ -150,6 +237,8 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         gameInput.OnJumpPressed+=JumpPressed;
         gameInput.OnJumpHelded+=JumpHelded;
         gameInput.OnAttackPressed+=AttackPressed;
+        gameInput.OnSkill1Pressed+=Skill1Pressed;
+        gameInput.OnSkill2Pressed+=Skill2Pressed;
         gameInput.OnDashPressed+=DashPressed;
         gameInput.OnBlockPressed+=BlockPressed;
         moveDir=gameInput.GetNormalizedMovementInput(); 
@@ -160,11 +249,13 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         gameInput.OnJumpPressed-=JumpPressed;
         gameInput.OnJumpHelded-=JumpHelded;
         gameInput.OnAttackPressed-=AttackPressed;
+        gameInput.OnSkill1Pressed-=Skill1Pressed;
+        gameInput.OnSkill2Pressed-=Skill2Pressed;
         gameInput.OnBlockPressed-=BlockPressed;
         gameInput.OnDashPressed-=DashPressed;
     }
 
-    public override void GetHit(HitInfo hitInfo)
+    public void Hitted(object sender,HitInfo hitInfo)
     {
         if (playerStateMachine.GetActualStateName() == PlayerStateName.Block)
         {
@@ -178,8 +269,40 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
             }
         }
         base.GetHit(hitInfo);
+        currentInvencibilityTime=stats.baseStats.invencibilityTime;
         stats.TakeDamage(hitInfo.damage);
         playerStateMachine.SwitchState(PlayerStateName.Hurt);
+        visual.StartFlahshing(stats.baseStats.flashingInterval,stats.baseStats.invencibilityTime);
     }
 
+    public void HittedByTrap()
+    {
+        ReturnToCheckPoint();
+        currentInvencibilityTime=stats.baseStats.invencibilityTime;
+        stats.TakeTrapDamage();
+        visual.StartFlahshing(stats.baseStats.flashingInterval,stats.baseStats.invencibilityTime);
+    }
+    public void ReturnToCheckPoint()
+    {
+        playerStateMachine.SwitchState(PlayerStateName.Idle);
+        transform.position=checkPoint;
+    }
+    public void NewLevel(Vector3 levelStartPos)
+    {
+        playerStateMachine.SwitchState(PlayerStateName.Idle);
+        checkPoint=levelStartPos;
+        transform.position=levelStartPos;
+    }
+    public void Dead(object sender, EventArgs e)
+    {
+        playerStateMachine.SwitchState(PlayerStateName.Death);
+        DestroyPlayerHitBoxes();
+        GameManager.instance.GameOver();
+        enabled=false;
+    }
+
+    private void DestroyPlayerHitBoxes()
+    {
+        playerHitBox.DestroyPlayerHitBox();
+    }
 }

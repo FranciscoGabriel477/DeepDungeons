@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5647052350295673058}
   - component: {fileID: 6718092591976960711}
   m_Layer: 10
-  m_Name: Axe
+  m_Name: OrcWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,10 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0168c00e3178447a8e6d5a57be1c70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrcWeapon
-  weaponCollider: {fileID: 6718092591976960711}
+  weaponColliders:
+  - {fileID: 6718092591976960711}
   weaponInfo: {fileID: 11400000, guid: 4edd00f1dd3c6b94e891496549edd530, type: 2}
   contactFilter:
-    useTriggers: 0
+    useTriggers: 1
     useLayerMask: 0
     useDepth: 0
     useOutsideDepth: 0
@@ -56,7 +57,7 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 4096
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
@@ -77,7 +78,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4087
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -95,7 +96,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.8054194, y: 0.096556306}
+  m_Offset: {x: 0.4881184, y: -0.0019118786}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -105,7 +106,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.663601, y: 1.9226496}
+  m_Size: {x: 2.1575341, y: 1.7257133}
   m_EdgeRadius: 0
 --- !u!1 &1746970145510776627
 GameObject:
@@ -252,8 +253,8 @@ Transform:
   m_GameObject: {fileID: 4755580291363337440}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
-  m_LocalScale: {x: 7.5, y: 7.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 619007326249047604}
@@ -307,7 +308,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 5120410236738981136, guid: ae6eac26507bd6b41b0450303ff09c38, type: 3}
+  m_Sprite: {fileID: -191499400, guid: fc0770882d7408b41b9db3764382abc7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -327,7 +328,7 @@ Animator:
   m_GameObject: {fileID: 4755580291363337440}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3b24553701fa05945a5fac57d93d98fb, type: 2}
+  m_Controller: {fileID: 9100000, guid: d7004adf40ab0e14295847f9b2ea96d5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -351,6 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5b51538dca2af4187a246ac8c18520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrcVisual
+  entitySprite: {fileID: 0}
 --- !u!1 &5021891680432141768
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,8 +545,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7763546662514406752}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.5, y: 0.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -563,7 +565,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: be54980cd8a1c44478035f086c606d4f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -637,7 +639,10 @@ MonoBehaviour:
   externalForce: {x: 0, y: 0}
   isFacingRight: 1
   wardPosition: {x: 0, y: 0, z: 0}
-  maxDistance: 10
+  maxDistanceX: 10
+  maxDistanceY: 10
+  attacksCooldowns: []
+  allAttacksOnCooldown: 0
   orcWeapon: {fileID: 5647052350295673058}
 --- !u!114 &5078950441510025975
 MonoBehaviour:
@@ -652,6 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrcMover
   colliderHeight: 1.05
+  offSet: 0
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -671,6 +677,7 @@ MonoBehaviour:
   baseMoveStats: {fileID: 11400000, guid: ccb91aab653b1184f8375af721e7a3f0, type: 2}
   lifeBar: {fileID: 8840301813942779906}
   localHUD: {fileID: 1746970145510776627}
+  currentStance: 0
 --- !u!1 &8521004271642864073
 GameObject:
   m_ObjectHideFlags: 0

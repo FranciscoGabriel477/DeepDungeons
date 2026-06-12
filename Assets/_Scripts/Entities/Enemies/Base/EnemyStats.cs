@@ -6,10 +6,12 @@ public class EnemyStats<T,Y> : EntityStats<T,Y> where T:EnemyBaseStats where Y:E
 {
     [SerializeField] protected Image lifeBar;
     [SerializeField] protected GameObject localHUD;
+    [SerializeField] protected float currentStance;
     protected override void Start()
     {
         base.Start();
-       localHUD.gameObject.SetActive(false);
+        currentStance=baseStats.stance;
+        localHUD.gameObject.SetActive(false);
     }
     public void OnDestroy()
     {       
@@ -20,5 +22,19 @@ public class EnemyStats<T,Y> : EntityStats<T,Y> where T:EnemyBaseStats where Y:E
         base.TakeDamage(damage);
         localHUD.gameObject.SetActive(true);
         lifeBar.fillAmount=currentLife/currentMaxLife;
+        currentStance-=damage;
+    }
+
+    public bool CheckForInstanceEnd()
+    {
+        if (currentStance <= 0)
+        {
+            currentStance=baseStats.stance;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

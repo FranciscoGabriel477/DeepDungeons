@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class EntityController<T,V,S,H,J> : MonoBehaviour,IHitable  where T: EntityMover where V: EntityVisual where S:EntityStats<H,J> where H:EntityBaseStats where J:EntityBaseMoveStats
 {
-    public T mover;
-    public V visual;
-    public S stats;
+    [HideInInspector] public T mover;
+    [HideInInspector] public V visual;
+    [HideInInspector] public S stats;
     public Vector2 moveDir;
     public Vector2 frameVelocity;
     public Vector2 externalForce;
     public bool isFacingRight;
     public bool IsGrounded{get; protected set;}
+    public bool IsHeadBump{get; protected set;}
     public List<Effect<T,V,S,H,J>> effects{get; protected set;}
     public List<Effect<T,V,S,H,J>> effectsToRemove{get; protected set;}
 
@@ -26,6 +27,7 @@ public class EntityController<T,V,S,H,J> : MonoBehaviour,IHitable  where T: Enti
         effectsToRemove = new List<Effect<T,V,S,H,J>>();
         isFacingRight=true;
         IsGrounded=mover.CheckGround();
+        IsHeadBump=mover.CheckforHeadBump();
     }
 
     private void GetComponents()

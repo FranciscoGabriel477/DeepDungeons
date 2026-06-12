@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChargeBaseMoveStats
   moveHorizontalSpeed: 2.5
   gravityAcc: 10
-  knockBackDecelaration: 45
+  knockBackDecelaration: 55
   maxKnockBack: 8
   dashVelocity: 6

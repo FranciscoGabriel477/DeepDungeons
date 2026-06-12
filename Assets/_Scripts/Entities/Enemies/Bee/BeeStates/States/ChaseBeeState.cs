@@ -11,10 +11,23 @@ public class ChaseBeeState : ChaseState<BeeController,BeeMover,BeeVisual,BeeStat
     public override void UpdateState(float deltaTime)
     {
         HandleMoveDir();
-        if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
+        /*if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
         {
             parent.SwitchState(EnemyStateName.Attack);
             return;
+        }*/
+        if (enemy.allAttacksOnCooldown)
+        {
+            parent.SwitchState(EnemyStateName.Cooling);
+            return;
+        }
+        for(int i = 0; i < enemy.stats.baseStats.attackDatas.Count; i++)
+        {
+            if (DistanceToPlayer() <= enemy.stats.baseStats.attackDatas[i].attackRange && enemy.attacksCooldowns[i]<=0f)
+            {
+                parent.SwitchState(enemy.stats.baseStats.attackDatas[i].attackName);
+                enemy.attacksCooldowns[i]=enemy.stats.baseStats.attackDatas[i].cooldown;
+            }
         }
         if((DistanceToPlayer() >= enemy.stats.baseStats.chaseRange) || !IsBounded())
         {

@@ -14,7 +14,7 @@ public class FastFallTransitionPlayerState : PlayerAirState
     public override void UpdateState(float deltaTime)
     {
         currentTimerInFastFallingTrasition-=deltaTime;
-        if (currentTimerInFastFallingTrasition <= 0)
+        if (currentTimerInFastFallingTrasition <= 0 || player.IsHeadBump)
         {
             parent.SwitchState(PlayerAirStateName.FastFall);
             return;

@@ -20,7 +20,7 @@ public class AttackPlayerState : PlayerState
 
     private void CheckEndOfAttack(object sender, StateMachine<ClassAttackState>.StateChangeInfo e)
     {
-        if (e.newState.stateName == "NotAttack")
+        if (e.newState.stateName == PlayerStateName.NotAttacking)
         {
             parent.SwitchState(player.moveDir.x==0?PlayerStateName.Idle:PlayerStateName.Walk);
             return;

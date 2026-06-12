@@ -7,7 +7,7 @@ public class BlockPlayerState : PlayerState
     public BlockPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Block, player)
     {
         notAllowedActions= new HashSet<string>{PlayerActionName.Jump};
-        notAllowedTransitions = new HashSet<string>{PlayerStateName.Block};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Block,PlayerStateName.SkillCast};
     }
 
     public override void EntryState()

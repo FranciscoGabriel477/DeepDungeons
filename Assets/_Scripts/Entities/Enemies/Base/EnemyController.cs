@@ -1,16 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.Mathematics;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J> where T: EntityMover where V: EntityVisual where S:EntityStats<H,J> where F:EnemyStateMachine where H:EnemyBaseStats where J:EnemyBaseMoveStats
+public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J> where T: EnemyMover where V: EnemyVisual where S:EnemyStats<H,J> where F:EnemyStateMachine where H:EnemyBaseStats where J:EnemyBaseMoveStats
 {
     protected F enemyStateMachine;
     public PlayerController player{get; protected set;}   
     public Vector3 wardPosition;
     public float maxDistanceX;
     public float maxDistanceY;
-
+    public List<float> attacksCooldowns;
+    public bool allAttacksOnCooldown=false;
     protected override void Awake()
     {
         base.Awake();
@@ -19,9 +22,35 @@ public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J>
     protected override void Start()
     {
         base.Start();
-        moveDir=Vector2.zero;
-        IsGrounded=mover.CheckGround();;
+        SetupAttackListCooldown();
         stats.OnDie+=OnDie;
+    }
+
+    protected virtual void Update()
+    {
+        UpdateAttackListCooldown(); 
+    }
+    protected virtual void SetupAttackListCooldown()
+    {
+        attacksCooldowns= new List<float>();
+        for(int i = 0; i < stats.baseStats.attackDatas.Count; i++)
+        {
+            attacksCooldowns.Add(0f);
+        }
+    }
+
+    protected virtual void UpdateAttackListCooldown()
+    {
+        allAttacksOnCooldown=true;
+        for(int i = 0; i < stats.baseStats.attackDatas.Count; i++)
+        {
+            attacksCooldowns[i]-=Time.deltaTime;
+            attacksCooldowns[i]=math.max(0f,attacksCooldowns[i]);
+            if (attacksCooldowns[i] == 0f)
+            {
+                allAttacksOnCooldown=false;
+            }
+        }
     }
     protected virtual void GetEnemyComponents()
     {
@@ -50,6 +79,7 @@ public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J>
 
     protected virtual void OnDie(object sender, EventArgs e)
     {
+        player.stats.GetExperience(stats.baseStats.experienceDroped);
         Destroy(this);
         Destroy(mover);
         Destroy(stats);
@@ -65,8 +95,20 @@ public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J>
         return player.transform.position;
     }
 
-    public void TotalDeath()
+    public void TotalDeath(object sender, EventArgs e)
     {
         Destroy(gameObject);
+    }
+
+    public override void GetHit(HitInfo hitInfo)
+    {
+        base.GetHit(hitInfo);
+        stats.TakeDamage(hitInfo.damage);
+        if (stats.CheckForInstanceEnd())
+        {
+            enemyStateMachine.SwitchState("Hurt");
+        }
+        visual.StartFlahshing(0.1f,0.5f);
+        
     }
 }

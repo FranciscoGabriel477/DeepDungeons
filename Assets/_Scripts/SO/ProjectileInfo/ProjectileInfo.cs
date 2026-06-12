@@ -6,5 +6,5 @@ public class ProjectileInfo : ScriptableObject
     public float speed;
     public float range;
     public float knockBack;
-    public float pierce;
+    public int pierce;
 }

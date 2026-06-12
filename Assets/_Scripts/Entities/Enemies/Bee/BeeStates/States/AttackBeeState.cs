@@ -4,20 +4,24 @@ using UnityEngine;
 public class AttackBeeState : BeeState
 {
     float actualTime;
+    int numberOfAttackInList=0;
     public AttackBeeState(BeeStateMachine parent, BeeController bee) : base(parent, BeeStateName.Attack, bee)
     {
     }
     public override void EntryState()
     {
         base.EntryState();
-        actualTime=enemy.stats.baseStats.attackTime;
+        actualTime=enemy.stats.baseStats.attackDatas[numberOfAttackInList].attackTime;
         bee.visual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
         HandleMoveDir();
+        HandleRotation();
+        enemy.SetHorizontalFrameVelocity(0);
+        enemy.SetVerticalFrameVelocity(0);
     }
     public override void UpdateState(float deltaTime)
     {
         actualTime-=deltaTime;
-        if (enemy.IsGrounded)
+        if (enemy.IsGrounded || enemy.IsHeadBump)
         {
             parent.SwitchState(BeeStateName.Cooling);
             return;
@@ -35,9 +39,7 @@ public class AttackBeeState : BeeState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
-       base.FixedUpdateState(fixedDeltaTime);
-       HandleHorizontalMomentum();
-       HandleVerticalMomentum(fixedDeltaTime);
+       
     }
 
     public override void ExitState()
@@ -45,12 +47,15 @@ public class AttackBeeState : BeeState
         base.ExitState();
         enemy.beeWeapon.OnEnemyHitted-=EnemyHitted;
         bee.visual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
-        enemy.beeWeapon.DisableWeapon();
+        enemy.beeWeapon.DisableWeapon(numberOfAttackInList);
+        enemy.attacksCooldowns[numberOfAttackInList]=enemy.stats.baseStats.attackDatas[numberOfAttackInList].cooldown;
     }
     protected void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
         enemy.beeWeapon.OnEnemyHitted+=EnemyHitted;
-        enemy.beeWeapon.EnableWeapon();
+        enemy.beeWeapon.EnableWeapon(numberOfAttackInList);
+        HandleHorizontalMomentum();
+        HandleVerticalMomentum(0f);
     }
     protected void EnemyHitted(object sender, EventArgs e)
     {

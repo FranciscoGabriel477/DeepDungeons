@@ -17,8 +17,9 @@ public class BeeController : EnemyController<BeeMover,BeeVisual,BeeStats,BeeStat
         enemyStateMachine.OnStateChanged+=visual.MainStateChanged;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowDebugRays();
         enemyStateMachine.Action(Time.deltaTime);
     }
@@ -26,17 +27,18 @@ public class BeeController : EnemyController<BeeMover,BeeVisual,BeeStats,BeeStat
     private void FixedUpdate()
     {
         IsGrounded=mover.CheckGround();
+        IsHeadBump=mover.CheckforHeadBump();
         enemyStateMachine.FixedAction(Time.fixedDeltaTime);
         HandleExternalForces();
         Move();
     }
 
-    public override void GetHit(HitInfo hitInfo)
+    /*public override void GetHit(HitInfo hitInfo)
     {
         base.GetHit(hitInfo);
         enemyStateMachine.SwitchState(BeeStateName.Hurt);
         stats.TakeDamage(hitInfo.damage);
-    }
+    }*/
 
     protected override void ShowDebugRays()
     {

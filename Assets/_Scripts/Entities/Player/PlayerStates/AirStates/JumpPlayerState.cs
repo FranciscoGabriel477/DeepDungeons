@@ -25,7 +25,7 @@ public class JumpPlayerState : PlayerAirState
             return;
         }
 
-        if(player.frameVelocity.y<0)
+        if(player.frameVelocity.y<0 || player.IsHeadBump)
         {
             parent.SwitchState(PlayerAirStateName.FastFall);
             return;

@@ -7,7 +7,7 @@ public class HurtPlayerState : PlayerState
     public HurtPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Hurt, player)
     {
         notAllowedActions= new HashSet<string>{PlayerActionName.Jump,PlayerActionName.Rotate};
-        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack,PlayerStateName.Block};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Dash,PlayerStateName.Attack,PlayerStateName.Block,PlayerStateName.SkillCast};
     }
 
     public override void EntryState()

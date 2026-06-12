@@ -15,10 +15,19 @@ MonoBehaviour:
   maxLife: 150
   timeInHurtState: 0.25
   rangeOfVision: 5
-  attackRange: 4
-  attackTime: 1
   patrolRange: 3
   minWardTime: 1
   maxWardTime: 2
   chaseRange: 10
-  coolingTime: 3
+  coolingTime: 2
+  stance: 75
+  attackDatas:
+  - attackName: Attack
+    attackRange: 4
+    attackTime: 2
+    cooldown: 5
+  - attackName: FastAttack
+    attackRange: 2
+    attackTime: 0.667
+    cooldown: 2
+  experienceDroped: 0

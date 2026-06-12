@@ -1,41 +1,55 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class SoldierClass : PlayerCharacterClass
 {
     public SoldierWeaponInfo weaponInfo;
+    public ContactFilter2D contactFilter;
     public SoldierVisual soldierVisual;
     public Collider2D weaponCollider{get; protected set;}
-    public ContactFilter2D contactFilter;
+    public ChargeCutInfo chargeCutInfo;
+    public ThrowAxeInfo throwAxeInfo;
 
     private void Awake()
     {
         weaponCollider=GetComponent<Collider2D>();
+        SetupSkillsDictionary();
     }
 
     private void Start()
     {
         SetupAttacckStateMachine();
+        SetupSkillStateMachine();
     }
-    private void Update()
+    protected override void Update()
     {
-        attackStateMachine.Action(Time.deltaTime);
+        base.Update();
     }
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        attackStateMachine.FixedAction(Time.fixedDeltaTime);
+        base.FixedUpdate();
     }
     private void SetupAttacckStateMachine()
     {
         attackStateMachine=new ClassAttackStateMachine(playerController);
         attackStateMachine.RegisterState(new MeeleAttackState1(attackStateMachine,playerController));
         attackStateMachine.RegisterState(new AirMeeleAttackState(attackStateMachine,playerController));
+        attackStateMachine.OnStateChanged+=soldierVisual.AttackStateChanged;
+    }
+
+    private void SetupSkillStateMachine()
+    {
+        skillStateMachine= new ClassSkillStateMachine(playerController);
+        skillStateMachine.RegisterState(new ChargeCutSkillState(skillStateMachine,playerController));
+        skillStateMachine.RegisterState(new ThrowAxeSkillState(skillStateMachine,playerController));
+        skillStateMachine.OnStateChanged+=soldierVisual.SkillStateChanged;
     }
     public override void HandleAttack()
     {
         
-        if (attackStateMachine.GetActualStateName() == "NotAttack")
+        if (attackStateMachine.GetActualStateName() == PlayerStateName.NotAttacking)
         {
             if (playerController.IsGrounded)
             {
@@ -47,9 +61,17 @@ public class SoldierClass : PlayerCharacterClass
             }
         }
     }
-
     public override float GetStaminaAttackCost()
     {
         return weaponInfo.staminaCostOnMeele1;
+    }
+
+    public override void SetupSkillsDictionary()
+    {
+        skillS= new Dictionary<string, SkillInfo>
+        {
+            { chargeCutInfo.skillName, chargeCutInfo },
+            { throwAxeInfo.skillName, throwAxeInfo   }
+        };
     }
 }

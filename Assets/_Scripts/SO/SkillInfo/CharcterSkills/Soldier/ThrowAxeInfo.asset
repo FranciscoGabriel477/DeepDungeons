@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454892ad9c3d71b45a0e6621e14a9d07, type: 3}
+  m_Name: ThrowAxeInfo
+  m_EditorClassIdentifier: Assembly-CSharp::ThrowAxeInfo
+  skillName: ThrowAxe
+  staminaCost: 40
+  cooldown: 12
+  UIinfo:
+    skillSprite: {fileID: -2136956082, guid: e333cd4e2719e564797fa6c3fd96438c, type: 3}
+    skillDescription: Arremesse um machado que vai e volta
+  throwableAxePrefab: {fileID: 4539087261021195415, guid: d088e4ee572d21142bfcf2d4a8aedcc7, type: 3}
+  timeToThrowAxe: 0.667
+  axeOffSet: {x: 0, y: 0.5, z: 0}

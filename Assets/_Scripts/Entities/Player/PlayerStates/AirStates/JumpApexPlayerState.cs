@@ -11,7 +11,7 @@ public class JumpApexPlayerState : PlayerAirState
 
     public override void UpdateState(float deltaTime)
     {
-        if(player.jumpIsHelded)
+        if(player.jumpIsHelded || player.IsHeadBump)
         {
             TimerHandler.StopTimer("ApexTimer");
             parent.SwitchState(PlayerAirStateName.FastFall);

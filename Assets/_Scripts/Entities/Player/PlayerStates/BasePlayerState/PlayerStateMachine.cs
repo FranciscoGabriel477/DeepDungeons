@@ -10,6 +10,8 @@ public class PlayerStateMachine : StateMachine<PlayerState>
         RegisterState(new HurtPlayerState(this,playerController));
         RegisterState(new DashPlayerState(this,playerController));
         RegisterState(new BlockPlayerState(this,playerController));
+        RegisterState(new SkillCastPlayerState(this,playerController));
+        RegisterState(new DeathPlayerState(this,playerController));
         SwitchState(PlayerStateName.Idle);
     }
 

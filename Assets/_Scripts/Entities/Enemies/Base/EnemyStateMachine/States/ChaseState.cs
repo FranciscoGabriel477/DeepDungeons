@@ -16,10 +16,23 @@ public class ChaseState<T, Y, U, I, F, P, Q> : EnemyStateWithComponents<T, Y, U,
     public override void UpdateState(float deltaTime)
     {
         HandleMoveDir();
-        if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
+        /*if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
         {
             parent.SwitchState(EnemyStateName.Attack);
             return;
+        }*/
+        if (enemy.allAttacksOnCooldown)
+        {
+            parent.SwitchState(EnemyStateName.Cooling);
+            return;
+        }
+        for(int i = 0; i < enemy.stats.baseStats.attackDatas.Count; i++)
+        {
+            if (DistanceToPlayer() <= enemy.stats.baseStats.attackDatas[i].attackRange && enemy.attacksCooldowns[i]<=0f)
+            {
+                parent.SwitchState(enemy.stats.baseStats.attackDatas[i].attackName);
+                return;
+            }
         }
         if((DistanceToPlayer() >= enemy.stats.baseStats.chaseRange) || !IsBounded())
         {
@@ -35,6 +48,6 @@ public class ChaseState<T, Y, U, I, F, P, Q> : EnemyStateWithComponents<T, Y, U,
 
     protected override void HandleMoveDir()
     {
-        enemy.moveDir=Vector3.Normalize((enemy.GetPlayerPos().x*Vector3.right-enemy.transform.position));
+        enemy.moveDir=Vector3.Normalize((enemy.GetPlayerPos().x*Vector3.right-enemy.transform.position.x*Vector3.right));
     }
 }

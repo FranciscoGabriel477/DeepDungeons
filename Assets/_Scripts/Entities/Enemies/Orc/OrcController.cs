@@ -20,8 +20,9 @@ public class OrcController : EnemyController<OrcMover,OrcVisual,OrcStats,OrcStat
         enemyStateMachine.OnStateChanged+=visual.MainStateChanged;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         ShowDebugRays();
         enemyStateMachine.Action(Time.deltaTime);
     }
@@ -34,12 +35,12 @@ public class OrcController : EnemyController<OrcMover,OrcVisual,OrcStats,OrcStat
         Move();
     }
 
-    public override void GetHit(HitInfo hitInfo)
+    /*public override void GetHit(HitInfo hitInfo)
     {
         base.GetHit(hitInfo);
-        enemyStateMachine.SwitchState(OrcStateName.Hurt);
+       // enemyStateMachine.SwitchState(OrcStateName.Hurt);
         stats.TakeDamage(hitInfo.damage);
-    }
+    }*/
     protected override void OnDie(object sender, EventArgs e)
     {
         base.OnDie(sender,e);

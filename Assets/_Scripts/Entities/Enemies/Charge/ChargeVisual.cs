@@ -4,6 +4,7 @@ using UnityEngine;
 public class ChargeVisual : EnemyVisual
 {
     public event EventHandler OnInitiateOfAttackAnimation;
+    public event EventHandler OnInitiateOfFastAttackAnimation;
      public override void MainStateChanged(object sender,StateMachine<EnemyState>.StateChangeInfo stateChangeInfo)
     {
         base.MainStateChanged(sender,stateChangeInfo);
@@ -22,11 +23,14 @@ public class ChargeVisual : EnemyVisual
             break;
 
             case ChargeStateName.Attack:
-            animator.Play("Attack");
+            animator.Play(ChargeStateName.Attack);
+            break;
+            case ChargeStateName.FastAttack:
+            animator.Play(ChargeStateName.FastAttack);
             break;
 
             case ChargeStateName.Hurt:
-            animator.Play("Hurt");
+            animator.Play(ChargeStateName.Hurt);
             break;
             case ChargeStateName.Cooling:
             animator.Play("Idle");
@@ -42,5 +46,9 @@ public class ChargeVisual : EnemyVisual
     public void InitiateOfAttackAnimation()
     {
         OnInitiateOfAttackAnimation?.Invoke(this,EventArgs.Empty);
+    }
+    public void InitiateOfFastAttackAnimation()
+    {
+        OnInitiateOfFastAttackAnimation?.Invoke(this,EventArgs.Empty);
     }
 }

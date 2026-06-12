@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3afd71d31fcee246abb3d5dc483c7a1, type: 3}
+  m_Name: PlayerToxicArrowInfo
+  m_EditorClassIdentifier: Assembly-CSharp::ToxicArrowProjectileInfo
+  damage: 10
+  speed: 10
+  range: 10
+  knockBack: 10
+  pierce: 0
+  enemyLayer: 8
+  groundLayer: 7
+  toxicArea: {fileID: 5494507797192467684, guid: 6896446003cf9484da85ed0f6fa88fe3, type: 3}

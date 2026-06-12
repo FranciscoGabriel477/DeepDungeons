@@ -11,15 +11,15 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
+  - PlayerPhysics
   - Ground
   - Enemy
   - PlayerWeapon
   - EnemyWeapon
   - Traps
-  - 
-  - 
-  - 
+  - PlayerHitBox
+  - CheckPoint
+  - NextLevel
   - 
   - 
   - 

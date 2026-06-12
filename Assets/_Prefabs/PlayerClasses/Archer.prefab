@@ -31,12 +31,13 @@ Transform:
   m_GameObject: {fileID: 3504745924947759068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.84, y: 0, z: 0}
+  m_LocalPosition: {x: -13.73, y: 0.535, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7255898177376042873}
   - {fileID: 599190747897759538}
+  - {fileID: 9106868721569474372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &3384189174261569714
@@ -73,8 +74,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1.05}
+  m_Offset: {x: 0, y: 0.225}
+  m_Size: {x: 0.5, y: 1.5}
   m_Direction: 0
 --- !u!70 &4914481002023991486
 CapsuleCollider2D:
@@ -110,8 +111,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1.05}
+  m_Offset: {x: 0, y: 0.225}
+  m_Size: {x: 0.5, y: 1.5}
   m_Direction: 0
 --- !u!50 &8366649397592264678
 Rigidbody2D:
@@ -152,8 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838930eedb9b8d14b92ef532bfd123d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
-  colliderHeight: 1.05
-  offSet: 0
+  colliderHeight: 1.53
+  offSet: 0.225
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -176,7 +177,13 @@ MonoBehaviour:
   frameVelocity: {x: 0, y: 0}
   externalForce: {x: 0, y: 0}
   isFacingRight: 0
-  playerHitBox: {fileID: 4914481002023991486}
+  playerHitBox: {fileID: 0}
+  skillSlot1: ToxicArrow
+  skillSlot2: 
+  currentSkill1Cooldown: 0
+  currentSkill2Cooldown: 0
+  currentSkillPressed: 0
+  checkPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2285012172873795124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,8 +196,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af855769657ddaf4f85af5b20064ae56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  baseStats: {fileID: 11400000, guid: 20069773bb223d748b61c44ff192f497, type: 2}
-  baseMoveStats: {fileID: 11400000, guid: e719945feb678e4459964fbe27628d8f, type: 2}
+  baseStats: {fileID: 11400000, guid: 71303f090ab702b4aab5933417c16b82, type: 2}
+  baseMoveStats: {fileID: 11400000, guid: d5d942b4bc12460448652cecdc9f143f, type: 2}
+  experienceToUp: 0
+  currentExperience: 0
+--- !u!1 &4112552673607559410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9106868721569474372}
+  - component: {fileID: 3547491228368348951}
+  - component: {fileID: 6953499358881265695}
+  m_Layer: 12
+  m_Name: PlayerHitBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9106868721569474372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4112552673607559410}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 443688813452124353}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &3547491228368348951
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4112552673607559410}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 7159
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.225}
+  m_Size: {x: 0.5, y: 1.5}
+  m_Direction: 0
+--- !u!114 &6953499358881265695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4112552673607559410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0656ab109ee05034f8ac0f003d419fc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHitBox
 --- !u!1 &7991984968971384415
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +293,7 @@ GameObject:
   - component: {fileID: 599190747897759538}
   - component: {fileID: 3031173615956654655}
   m_Layer: 9
-  m_Name: Archer
+  m_Name: ArcherClass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,6 +343,8 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  shotPoint: {x: 0, y: 0.4, z: 0}
+  toxicArrowInfo: {fileID: 11400000, guid: 738b4c0d39e76934cb230db6c72b9b77, type: 2}
 --- !u!1 &8135422695590188593
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,8 +373,8 @@ Transform:
   m_GameObject: {fileID: 8135422695590188593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.5, y: 7.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0.27, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 443688813452124353}
@@ -335,7 +428,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -7978735674136817684, guid: 2f6c2e09f24f34745a582411daf5312f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f83076094819d9b479b9b4976beedcc6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -355,7 +448,7 @@ Animator:
   m_GameObject: {fileID: 8135422695590188593}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 86b89dfb96e535e46b0f82b912f89dca, type: 2}
+  m_Controller: {fileID: 9100000, guid: 30ab8d2826b2fc54e96273ce0dfd427f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -379,3 +472,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f34944efb00f94c83555100dd24d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArcherVisual
+  entitySprite: {fileID: 0}

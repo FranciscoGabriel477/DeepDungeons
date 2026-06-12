@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class AttackChargeState : ChargeState
 {
-    float actualTime;
+    private float actualTime;
+    private int numberOfAttackInList;
+    private bool dashStart;
     public AttackChargeState(ChargeStateMachine parent, ChargeController charge) : base(parent, ChargeStateName.Attack, charge){}
     public override void EntryState()
     {
         base.EntryState();
-        actualTime=enemy.stats.baseStats.attackTime;
+        actualTime=enemy.stats.baseStats.attackDatas[numberOfAttackInList].attackTime;
         charge.visual.OnInitiateOfAttackAnimation+=InitiateOfAttackAnimation;
+        enemy.SetHorizontalFrameVelocity(0f);
+        dashStart=false;
         HandleMoveDir();
     }
     public override void UpdateState(float deltaTime)
@@ -29,7 +33,16 @@ public class AttackChargeState : ChargeState
     public override void FixedUpdateState(float fixedDeltaTime)
     {
        base.FixedUpdateState(fixedDeltaTime);
-       HandleHorizontalMomentum();
+        
+        if (dashStart)
+        {
+            HandleHorizontalMomentum();
+        }
+        else
+        {
+            HandleRotation();
+            HandleMoveDir();
+        }
     }
 
     public override void ExitState()
@@ -37,12 +50,15 @@ public class AttackChargeState : ChargeState
         base.ExitState();
         enemy.chargeWeapon.OnEnemyHitted-=EnemyHitted;
         charge.visual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
-        enemy.chargeWeapon.DisableWeapon();
+        enemy.attacksCooldowns[numberOfAttackInList]=enemy.stats.baseStats.attackDatas[numberOfAttackInList].cooldown;
+        enemy.chargeWeapon.DisableWeapon(0);
     }
     protected void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
         enemy.chargeWeapon.OnEnemyHitted+=EnemyHitted;
-        enemy.chargeWeapon.EnableWeapon();
+        enemy.chargeWeapon.EnableWeapon(0);
+        dashStart=true;
+        charge.visual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
     }
     protected void EnemyHitted(object sender, EventArgs e)
     {

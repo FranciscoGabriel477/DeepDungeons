@@ -11,6 +11,7 @@ public class ChargeStateMachine : EnemyStateMachine
         RegisterState(new GoBackChargeState(this,chargeController));
         RegisterState(new CoolingChargeState(this,chargeController));
         RegisterState(new AttackChargeState(this,chargeController));
+        RegisterState(new FastAttackChargeState(this,chargeController));
         SwitchState(ChargeStateName.Ward);
     }
 }

@@ -24,12 +24,13 @@ public class CoolingState<T, Y, U, I, F, P, Q> : EnemyStateWithComponents<T, Y, 
         actualTime-=deltaTime;
         if (actualTime <= 0)
         {
-            if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
+            /*if (DistanceToPlayer() <= enemy.stats.baseStats.attackRange)
             {
                 parent.SwitchState(EnemyStateName.Attack);
                 return;
             }
-            else if((DistanceToPlayer() <= enemy.stats.baseStats.chaseRange) && IsBounded())
+            else */
+            if((DistanceToPlayer() <= enemy.stats.baseStats.chaseRange) && IsBounded())
             {
                 parent.SwitchState(EnemyStateName.Chase);
                 return;
@@ -44,5 +45,20 @@ public class CoolingState<T, Y, U, I, F, P, Q> : EnemyStateWithComponents<T, Y, 
     public override void FixedUpdateState(float fixedDeltaTime)
     {
         HandleRotation();
+    }
+
+    protected override void HandleRotation()
+    {
+        Vector3 playerDir=(enemy.GetPlayerPos()-enemy.transform.position).normalized;
+        if (enemy.isFacingRight && playerDir.x<0)
+        {
+            enemy.isFacingRight=false;
+            enemy.transform.Rotate(0,-180f,0);
+        }
+        else if(!enemy.isFacingRight && playerDir.x>0)
+        {
+            enemy.isFacingRight=true;
+            enemy.transform.Rotate(0,180f,0);
+        }
     }
 }

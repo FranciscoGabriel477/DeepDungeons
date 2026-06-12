@@ -15,12 +15,17 @@ MonoBehaviour:
   maxLife: 80
   timeInHurtState: 0.333
   rangeOfVision: 8
-  attackRange: 5
-  attackTime: 5
   patrolRange: 3
   minWardTime: 0.5
   maxWardTime: 1
   chaseRange: 15
-  coolingTime: 1.25
+  coolingTime: 2
+  stance: 15
+  attackDatas:
+  - attackName: Attack
+    attackRange: 5
+    attackTime: 5
+    cooldown: 2
+  experienceDroped: 100
   patrolRangeY: 1
   targetPointAtPlayer: 2

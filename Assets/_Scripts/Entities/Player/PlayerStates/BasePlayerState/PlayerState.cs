@@ -6,6 +6,7 @@ public class PlayerState : State<PlayerState>
 {
     protected PlayerController player;
     protected GameInput gameInput;
+    public bool invencible{get; protected set;}
     public PlayerState(PlayerStateMachine parent, string stateName,PlayerController player) : base(parent, stateName)
     {
         this.player=player;

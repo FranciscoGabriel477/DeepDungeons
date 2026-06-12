@@ -7,10 +7,12 @@ public class EntityVisual : MonoBehaviour
 {
     protected string mainStateName;
     protected Animator animator;
+    public SpriteRenderer entitySprite;
 
     private void Awake()
     {
         animator=GetComponent<Animator>();
+        entitySprite=GetComponent<SpriteRenderer>();
     }
     /*public virtual void PlayAnimation(string name)
     {

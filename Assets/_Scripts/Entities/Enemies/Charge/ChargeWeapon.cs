@@ -7,15 +7,6 @@ public class ChargeWeapon : EntityWeapon
     protected override void Start()
     {
         base.Start();
-        DisableWeapon();
-    }
-    public void EnableWeapon()
-    {
-        weaponCollider.enabled=true;
-    }
-    public void DisableWeapon()
-    {
-        weaponCollider.enabled=false;
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,4 +19,5 @@ public class ChargeWeapon : EntityWeapon
             OnEnemyHitted?.Invoke(this,EventArgs.Empty);
         }
     }
+    
 }

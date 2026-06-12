@@ -7,14 +7,15 @@ public class DashPlayerState : PlayerState
     private float actualTime;
     public DashPlayerState(PlayerStateMachine parent,PlayerController player) : base(parent, PlayerStateName.Dash, player)
     {
+        invencible=true;
         notAllowedActions= new HashSet<string>{PlayerActionName.Jump,PlayerActionName.Rotate};
-        notAllowedTransitions = new HashSet<string>{PlayerStateName.Attack,PlayerStateName.Dash,PlayerStateName.Block};
+        notAllowedTransitions = new HashSet<string>{PlayerStateName.Attack,PlayerStateName.Dash,PlayerStateName.Block,PlayerStateName.SkillCast};
     }
 
     public override void EntryState()
     {
         player.stats.ConsumeStamina(player.stats.baseMoveStats.dashStaminaCost);
-        player.playerHitBox.enabled=false;
+       // player.playerHitBox.enabled=false;
         actualTime=player.stats.baseMoveStats.timeInDashState;
         float dashDir;
         if (player.moveDir.x != 0)
@@ -44,7 +45,6 @@ public class DashPlayerState : PlayerState
 
     public override void ExitState()
     {
-        player.playerHitBox.enabled=true;
         player.ResetDashCooldown();
         if (player.playerAirControlStateMachine.GetActualStateName()==PlayerAirStateName.Suspend)
         {

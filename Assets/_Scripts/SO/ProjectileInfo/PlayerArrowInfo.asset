@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a30a90740c27284eb58cb790c1e5eaf, type: 3}
   m_Name: PlayerArrowInfo
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileInfo
-  damage: 5
+  damage: 15
   speed: 10
   range: 10
   knockBack: 10

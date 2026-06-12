@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrcBaseMoveStats
   moveHorizontalSpeed: 3
   gravityAcc: 10
-  knockBackDecelaration: 40
-  maxKnockBack: 10
+  knockBackDecelaration: 50
+  maxKnockBack: 5
