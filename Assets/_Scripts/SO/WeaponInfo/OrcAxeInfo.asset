@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6e6217efa46cc4a980b09ae0b30c68, type: 3}
   m_Name: OrcAxeInfo
   m_EditorClassIdentifier: Assembly-CSharp::WeaponInfo
-  damage: 3
+  damage: 15
   knockBackImpulse: 5

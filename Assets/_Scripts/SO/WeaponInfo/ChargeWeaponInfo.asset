@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6e6217efa46cc4a980b09ae0b30c68, type: 3}
   m_Name: ChargeWeaponInfo
   m_EditorClassIdentifier: Assembly-CSharp::WeaponInfo
-  damage: 30
+  damage: 40
   knockBackImpulse: 8
