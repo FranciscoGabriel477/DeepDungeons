@@ -65,7 +65,7 @@ public class ChargeCutSkillState : SoldierSkillState
     }
     public virtual void ChargeCutCast(float dir)
     {
-        Collider2D[] enemiesHitted = Physics2D.OverlapBoxAll((Vector2)soldier.transform.position+(dir==0f?soldier.chargeCutInfo.colliderOffset:-soldier.chargeCutInfo.colliderOffset),soldier.chargeCutInfo.colliderSize,0f,soldier.contactFilter.layerMask);
+        Collider2D[] enemiesHitted = Physics2D.OverlapBoxAll((Vector2)soldier.transform.position+(dir==0f?soldier.chargeCutInfo.colliderOffset:-soldier.chargeCutInfo.colliderOffset),soldier.chargeCutInfo.colliderSize,0f,soldier.weaponInfo.enemyLayer);
         if (enemiesHitted.Length>0)
         {
             IHitable enemy;

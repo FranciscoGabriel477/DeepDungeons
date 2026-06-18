@@ -16,6 +16,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnDashPressed;
     public event EventHandler OnBlockPressed;
     public event EventHandler OnBlockReleased;
+    public event EventHandler OnPausePressed;
     private void Awake()
     {
         if(instance != null && instance != this)
@@ -42,6 +43,7 @@ public class GameInput : MonoBehaviour
         playerInputs.Player.Dash.performed += DashPressed;
         playerInputs.Player.Block.performed += BlockPressed;
         playerInputs.Player.Block.canceled += BlockReleased;
+        playerInputs.Player.Pause.performed += PausePressed;
         
     }
 
@@ -58,6 +60,7 @@ public class GameInput : MonoBehaviour
         playerInputs.Player.Dash.performed -= DashPressed;
         playerInputs.Player.Block.performed -= BlockPressed;
         playerInputs.Player.Block.canceled -= BlockReleased;
+        playerInputs.Player.Pause.performed -= PausePressed;
     }
 
     public Vector2 GetNormalizedMovementInput()
@@ -67,43 +70,92 @@ public class GameInput : MonoBehaviour
 
     public void JumpPressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnJumpPressed?.Invoke(this,EventArgs.Empty);
     }
     public void JumpHelded(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnJumpHelded?.Invoke(this,EventArgs.Empty);
     }
     public void AttackPressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnAttackPressed?.Invoke(this,EventArgs.Empty);
     }
     public void Skill1Pressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnSkill1Pressed?.Invoke(this,EventArgs.Empty);
     }
     public void Skill2Pressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnSkill2Pressed?.Invoke(this,EventArgs.Empty);
     }
     public void Skill1Helded(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnSkill1Helded?.Invoke(this,EventArgs.Empty);
     }
     public void Skill2Helded(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnSkill2Helded?.Invoke(this,EventArgs.Empty);
     }
     public void DashPressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnDashPressed?.Invoke(this,EventArgs.Empty);
     }
     public void BlockPressed(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnBlockPressed?.Invoke(this,EventArgs.Empty);
     }
     public void BlockReleased(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         OnBlockReleased?.Invoke(this,EventArgs.Empty);
     }
+    public void PausePressed(InputAction.CallbackContext context)
+    {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+        OnPausePressed?.Invoke(this,EventArgs.Empty);
+    }
+    
     
 }

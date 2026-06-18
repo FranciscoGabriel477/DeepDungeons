@@ -35,6 +35,7 @@ public class DashPlayerState : PlayerState
     }
     public override void UpdateState(float deltaTime)
     {
+        base.UpdateState(deltaTime);
         actualTime-=deltaTime;
         if (actualTime <= 0)
         {
@@ -42,7 +43,11 @@ public class DashPlayerState : PlayerState
             return;
         }
     }
-
+    public override void FixedUpdateState(float fixedDeltaTime)
+    {
+        base.FixedUpdateState(fixedDeltaTime);
+        player.Move();
+    }
     public override void ExitState()
     {
         player.ResetDashCooldown();
@@ -61,6 +66,6 @@ public class DashPlayerState : PlayerState
 
     public override bool CheckTrasitionConditions()
     {
-        return parent.AllowsTransition(PlayerStateName.Dash) && player.currentTimerDashCoolDown==0 && player.stats.currentStamina>=player.stats.baseMoveStats.dashStaminaCost;
+        return parent.AllowsTransition(PlayerStateName.Dash) && !player.timers.DashInCooldown() && player.stats.currentStamina>=player.stats.baseMoveStats.dashStaminaCost;
     }
 }

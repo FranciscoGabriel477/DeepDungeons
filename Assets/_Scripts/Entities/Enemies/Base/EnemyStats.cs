@@ -37,4 +37,15 @@ public class EnemyStats<T,Y> : EntityStats<T,Y> where T:EnemyBaseStats where Y:E
             return false;
         }
     }
+
+    protected void OnDrawGizmos()
+    {
+        Gizmos.color=Color.blue;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireSphere(Vector3.zero,baseStats.rangeOfVision);
+
+        Gizmos.color=Color.yellow;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero,Vector3.up*baseStats.patrolRange*2 + Vector3.right*baseStats.patrolRange*2);
+    }
 }

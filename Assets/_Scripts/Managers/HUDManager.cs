@@ -25,6 +25,7 @@ public class HUDManager: MonoBehaviour
     public Image ScreenFade;
     public Image ScreenGameOverFade;
     public GameObject gameOverButton;
+    public GameObject PauseMenu;
     //public int slotSelected=0;
     //int skill1Index;
     //int skill2Index;
@@ -50,6 +51,7 @@ public class HUDManager: MonoBehaviour
     private void Start()
     {
         //PlayerLevelUp();
+        GameInput.instance.OnPausePressed+=PauseInput;
     }
     public void PlayerLifeChange(object sender, PlayerStats.LifeInfo lifeInfo)
     {
@@ -106,8 +108,33 @@ public class HUDManager: MonoBehaviour
 
     public void PlayAgainButtonPressed()
     {
-        Debug.Log("A");
         GameManager.instance.PlayAgain();
     }
     
+    public void HandleSkill1Cooldown(object sender, PlayerCooldowns.SkillCooldown skillCooldown)
+    {
+        skillSlot1Cooldown.fillAmount=skillCooldown.current/skillCooldown.total;
+    }
+    public void HandleSkill2Cooldown(object sender, PlayerCooldowns.SkillCooldown skillCooldown)
+    {
+        skillSlot2Cooldown.fillAmount=skillCooldown.current/skillCooldown.total;
+    }
+
+    public void PauseInput(object sender, EventArgs e)
+    {
+        GameManager.instance.PauseGame();
+        PauseMenu.SetActive(true);
+    }
+
+    public void ContinueButtonPressed()
+    {
+        PauseMenu.SetActive(false);
+        GameManager.instance.Continue();
+    }
+
+    public void BackToMenuButtonPressed()
+    {
+        PauseMenu.SetActive(false);
+        GameManager.instance.PlayAgain();
+    }
 }

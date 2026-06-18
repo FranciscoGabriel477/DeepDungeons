@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class BeeWeapon : EntityWeapon
+public class BeeWeapon : EntityWeapon<BeeWeaponInfo>
 {
     public event EventHandler OnEnemyHitted;
     protected override void Start()

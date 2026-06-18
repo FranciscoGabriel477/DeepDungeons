@@ -9,6 +9,7 @@ public class JumpPlayerState : PlayerAirState
     {
         player.SetVerticalFrameVelocity(player.stats.baseMoveStats.jumpInitialSpeed);
         player.ResetJumpBuffer();
+        player.ResetCoyoteTime();
     }
 
     public override void UpdateState(float deltaTime)
@@ -36,14 +37,15 @@ public class JumpPlayerState : PlayerAirState
             parent.SwitchState(PlayerAirStateName.FastFall);
             return;
         }*/
-
-
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
         HandleVerticalMomentum(fixedDeltaTime);
     }
-
+    public override void ExitState()
+    {
+        player.ResetCoyoteTime();
+    }
     protected override void HandleVerticalMomentum(float fixedDeltaTime)
     {
         float newVelocityY=player.frameVelocity.y+player.stats.baseMoveStats.gravityAcc*fixedDeltaTime;

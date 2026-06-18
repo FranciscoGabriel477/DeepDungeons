@@ -287,6 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeeMover
   colliderHeight: 1
+  colliderSize: {x: 0.5, y: 1}
   offSet: 0
   groundLayerMask:
     serializedVersion: 2
@@ -305,6 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BeeStats
   baseStats: {fileID: 11400000, guid: 08fcaa9c893e62b44a5ebe82df87b913, type: 2}
   baseMoveStats: {fileID: 11400000, guid: 0a6d56189b2b96b40a24cd8ae5dadf4b, type: 2}
+  currentLife: 0
   lifeBar: {fileID: 3311736509729534900}
   localHUD: {fileID: 7000229975987326896}
   currentStance: 0
@@ -595,9 +597,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6dcd60533fcf44b55e07e0f3e2e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeeWeapon
+  weaponInfo: {fileID: 11400000, guid: cbb0591407222724695d7f19c1e2d124, type: 2}
   weaponColliders:
   - {fileID: 2841442710029095432}
-  weaponInfo: {fileID: 11400000, guid: e0bb72b6fc9ba1a4580b4dd52830720d, type: 2}
   contactFilter:
     useTriggers: 0
     useLayerMask: 0

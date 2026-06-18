@@ -11,15 +11,16 @@ public class NotInAirPlayerState : PlayerAirState
     }
     public override void UpdateState(float deltaTime)
     {
-        if (!player.IsGrounded)
-        {
-            parent.SwitchState(PlayerAirStateName.Fall);
-            return;
-        }
 
         if (player.CheckJumpConditions())
         {
             parent.SwitchState(PlayerAirStateName.Jump);
+            return;
+        }
+        
+        if (!player.IsGrounded)
+        {
+            parent.SwitchState(PlayerAirStateName.Fall);
             return;
         }
         

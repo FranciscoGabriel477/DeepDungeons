@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public LevelData levelData;
     public PlayerController player;
     int currentLevel;
+    bool inPauseByTrapCoroutine=false;
     
     private void Awake()
     {
@@ -21,7 +23,6 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     } 
-    
     public void Play(int choice)
     {
         currentLevel=0;
@@ -37,13 +38,13 @@ public class GameManager : MonoBehaviour
         PassLevel();
     }
     public void PassLevel()
-    {   Debug.Log(currentLevel);
-        if (currentLevel > levelData.levels.Count)
+    {   Debug.Log(levelData.levels.Count);
+        if (currentLevel >= levelData.levels.Count)
         {
             PlayAgain();
             return;
         }
-        LevelData.LevelInfo levelSelected=levelData.levels[currentLevel].levelList[Random.Range(0,levelData.levels[currentLevel].levelList.Count)];
+        LevelData.LevelInfo levelSelected=levelData.levels[currentLevel].levelList[UnityEngine.Random.Range(0,levelData.levels[currentLevel].levelList.Count)];
         currentLevel++;
         StartCoroutine(LoadLevelAndMovePlayer(levelSelected));
     }
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
         float timeToFade=0.5f;
         float timeInTotalFade=1f;
             PauseGame();
+            inPauseByTrapCoroutine=true;
             float actualTime=0f;
             while (actualTime <= timeToFade)
             {
@@ -103,6 +105,7 @@ public class GameManager : MonoBehaviour
             HUDManager.instance.ChangeScreenFade(0f);
             yield return new WaitForSecondsRealtime(1f);
             DespauseGame();
+            inPauseByTrapCoroutine=false;
     }
     public void DestroyAllnDontDestroy()
     {
@@ -142,5 +145,12 @@ public class GameManager : MonoBehaviour
     {
         DestroyAllnDontDestroy();
         SceneManager.LoadScene(ScenesNames.MainMenu);
+    }
+    public void Continue()
+    {
+        if (!inPauseByTrapCoroutine)
+        {
+            DespauseGame();
+        }
     }
 }

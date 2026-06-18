@@ -48,14 +48,14 @@ public class AirMeeleAttackState : SoldierAttackState
     }
     public virtual void Attack(float dir)
     {
-        RaycastHit2D[] enemiesHitted=new RaycastHit2D[5];
-        soldier.weaponCollider.Cast(Vector3.zero,soldier.contactFilter,enemiesHitted);
-        if (enemiesHitted[0])
-        {
-            Vector2 KnockBackDir=soldier.transform.position.x-enemiesHitted[0].transform.position.x<0?Vector2.right:Vector2.left;
-            IHitable enemy=null;
-            enemiesHitted[0].collider.gameObject.TryGetComponent<IHitable>(out enemy);
-            if (enemy != null)
+        Vector2 offSet=soldier.transform.rotation.eulerAngles.y==0?soldier.weaponInfo.airAttackMeele1OffSet:-soldier.weaponInfo.airAttackMeele1OffSet;
+        offSet.y=soldier.weaponInfo.airAttackMeele1OffSet.y;
+        Vector2 attackCenter=(Vector2)soldier.transform.position+offSet;
+        Collider2D[] enemiesHitted=Physics2D.OverlapBoxAll(attackCenter,soldier.weaponInfo.airAttackMeele1Size,soldier.transform.rotation.eulerAngles.y,soldier.weaponInfo.enemyLayer);
+        foreach(Collider2D enemyHitted in enemiesHitted){
+            Vector2 KnockBackDir=soldier.transform.position.x-enemyHitted.transform.position.x<0?Vector2.right:Vector2.left;
+            enemyHitted.gameObject.TryGetComponent<IHitable>(out IHitable enemy);
+            if(enemy != null)
             {
                 enemy.GetHit(new HitInfo{damage=soldier.weaponInfo.damage, knockBack=KnockBackDir*soldier.weaponInfo.knockBackImpulse,posOrigin=soldier.transform.position});
             }

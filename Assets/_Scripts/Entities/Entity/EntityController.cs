@@ -59,9 +59,9 @@ public class EntityController<T,V,S,H,J> : MonoBehaviour,IHitable  where T: Enti
         }
         
     }
-    protected virtual void HandleExternalForces(){}
+    public virtual void HandleExternalForces(){}
 
-    protected virtual void HandleEffects()
+    public virtual void HandleEffects()
     {
         foreach(Effect<T,V,S,H,J> e in effects)
         {

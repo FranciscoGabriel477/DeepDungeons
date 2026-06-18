@@ -19,7 +19,7 @@ MonoBehaviour:
   minWardTime: 1
   maxWardTime: 2
   chaseRange: 10
-  coolingTime: 0.5
+  coolingTime: 0.9
   stance: 60
   attackDatas:
   - attackName: Attack

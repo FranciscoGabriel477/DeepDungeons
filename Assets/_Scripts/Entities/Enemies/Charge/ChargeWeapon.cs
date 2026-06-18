@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ChargeWeapon : EntityWeapon
+public class ChargeWeapon : EntityWeapon<ChargeWeaponInfo>
 {
     public event EventHandler OnEnemyHitted;
     protected override void Start()
@@ -19,5 +19,10 @@ public class ChargeWeapon : EntityWeapon
             OnEnemyHitted?.Invoke(this,EventArgs.Empty);
         }
     }
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color=Color.green;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(weaponInfo.fastAttackOffSet,weaponInfo.fastAttackSize);
+    }
 }

@@ -6,8 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(OrcStats))]
 public class OrcController : EnemyController<OrcMover,OrcVisual,OrcStats,OrcStateMachine,OrcBaseStats,OrcBaseMoveStats>
 {
-    public OrcWeapon orcWeapon;
 
+    public OrcWeapon orcWeapon;
     protected override void Awake()
     {
         base.Awake();
@@ -35,15 +35,6 @@ public class OrcController : EnemyController<OrcMover,OrcVisual,OrcStats,OrcStat
         Move();
     }
 
-    /*public override void GetHit(HitInfo hitInfo)
-    {
-        base.GetHit(hitInfo);
-       // enemyStateMachine.SwitchState(OrcStateName.Hurt);
-        stats.TakeDamage(hitInfo.damage);
-    }*/
-    protected override void OnDie(object sender, EventArgs e)
-    {
-        base.OnDie(sender,e);
-        Destroy(orcWeapon);
-    }
+    
+
 }

@@ -22,7 +22,7 @@ MonoBehaviour:
   colliderOffset: {x: 0.8, y: 0.6}
   finishCutTime: 0.5
   timeToTotalDamge: 1.5
-  baseDamage: 0
-  chargeDamage: 50000
+  baseDamage: 20
+  chargeDamage: 80
   baseKnockBack: 3
   chargeKnockBack: 3

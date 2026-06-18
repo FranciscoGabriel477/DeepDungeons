@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class DeathPlayerState : PlayerState
 {
@@ -12,6 +13,10 @@ public class DeathPlayerState : PlayerState
     public override void EntryState()
     {
         player.playerHitBox.enabled=false;
+        player.externalForce=Vector2.zero;
+        player.SetHorizontalFrameVelocity(0);
+        player.SetVerticalFrameVelocity(0);
+        player.Move();
     }
     
 }

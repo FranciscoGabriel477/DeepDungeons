@@ -28,7 +28,16 @@ public class SkillCastPlayerState : PlayerState
             GameInput.instance.OnSkill2Helded+=player.characterClass.skillStateMachine.currentState.HabilityButttonRealized;
         }
     }
+    public override void UpdateState(float deltaTime)
+    {
+        base.UpdateState(deltaTime);
+    }
+    public override void FixedUpdateState(float fixedDeltaTime)
+    {
+        base.FixedUpdateState(fixedDeltaTime);
+        player.Move();
 
+    }
     private void CheckEndOfSkill(object sender, StateMachine<ClassSkillState>.StateChangeInfo e)
     {
         if (e.newState.stateName == PlayerStateName.NotCastingSkill)
@@ -52,11 +61,11 @@ public class SkillCastPlayerState : PlayerState
         player.characterClass.FinishSkill();
         if (player.skillSlot1 == skillSelected)
         {
-            player.currentSkill1Cooldown=player.characterClass.skillS[skillSelected].cooldown;
+            player.OnSkill1EnterCooldown?.Invoke(player, new PlayerController.CooldownCount{cooldown=player.characterClass.skillS[skillSelected].cooldown});
         }
         if(player.skillSlot2 == skillSelected)
         {
-            player.currentSkill2Cooldown=player.characterClass.skillS[skillSelected].cooldown;
+            player.OnSkill2EnterCooldown?.Invoke(player, new PlayerController.CooldownCount{cooldown=player.characterClass.skillS[skillSelected].cooldown});
         }
     }
 

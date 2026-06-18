@@ -7,6 +7,7 @@ public class EnemyVisual : EntityVisual
     private void OnDestroy()
     {
         animator.Play(EnemyStateName.Death);
+        
     }
     public virtual void MainStateChanged(object sender,StateMachine<EnemyState>.StateChangeInfo stateChangeInfo)
     {

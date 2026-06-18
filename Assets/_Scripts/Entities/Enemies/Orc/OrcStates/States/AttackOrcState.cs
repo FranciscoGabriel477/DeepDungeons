@@ -29,17 +29,30 @@ public class AttackOrcState : OrcState
     }
     public override void ExitState()
     {
-        orc.orcWeapon.DisableWeapon(numberOfAttackInList);
         enemy.attacksCooldowns[numberOfAttackInList]=enemy.stats.baseStats.attackDatas[numberOfAttackInList].cooldown;
         orc.visual.OnInitiateOfAttackAnimation-=InitiateOfAttackAnimation;
     }   
     private void InitiateOfAttackAnimation(object sender, EventArgs e)
     {
-        orc.orcWeapon.EnableWeapon(numberOfAttackInList);
-        orc.orcWeapon.Attack(orc.transform.rotation.eulerAngles.y);
+        Attack(orc.transform.rotation.eulerAngles.y);
     }
     protected override void HandleMoveDir()
     {
-        orc.moveDir=Vector3.Normalize((orc.GetPlayerPos().x*Vector3.right-orc.transform.position));
+        orc.moveDir=Vector3.Normalize(orc.GetPlayerPos().x*Vector3.right-orc.transform.position);
+    }
+    public virtual void Attack(float dir)
+    {
+        Vector2 offset=dir==0?orc.orcWeapon.weaponInfo.attack1OffSet:-orc.orcWeapon.weaponInfo.attack1OffSet;
+        offset.y=orc.orcWeapon.weaponInfo.attack1OffSet.y;
+        Vector2 attackCenter=(Vector2)orc.transform.position+offset;
+        Collider2D[] enemiesHitted=Physics2D.OverlapBoxAll(attackCenter,orc.orcWeapon.weaponInfo.attack1Size,dir,orc.orcWeapon.weaponInfo.enemyLayer);
+        foreach(Collider2D enemyHitted in enemiesHitted){
+            Vector2 KnockBackDir=orc.transform.position.x-enemyHitted.transform.position.x<0?Vector2.right:Vector2.left;
+            enemyHitted.gameObject.TryGetComponent<IHitable>(out IHitable enemy);
+            if(enemy != null)
+            {
+                enemy.GetHit(new HitInfo{damage=orc.orcWeapon.weaponInfo.damage, knockBack=KnockBackDir*orc.orcWeapon.weaponInfo.knockBackImpulse,posOrigin=orc.transform.position});
+            }
+        }
     }
 }

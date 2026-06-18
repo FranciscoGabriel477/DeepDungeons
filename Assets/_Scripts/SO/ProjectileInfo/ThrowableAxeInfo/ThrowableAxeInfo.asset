@@ -19,6 +19,6 @@ MonoBehaviour:
   pierce: 0
   decelaration: -8
   cooldownReduce: 6
-  playerLayer: 6
+  playerLayer: 12
   enemyLayer: 8
   groundLayer: 7

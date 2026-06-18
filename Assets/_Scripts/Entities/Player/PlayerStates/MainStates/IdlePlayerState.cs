@@ -7,6 +7,7 @@ public class IdlePlayerState : PlayerState
 
     public override void UpdateState(float deltaTime)
     {
+        base.UpdateState(deltaTime);
         if (player.moveDir.x != 0)
         {
             parent.SwitchState(PlayerStateName.Walk);
@@ -16,7 +17,9 @@ public class IdlePlayerState : PlayerState
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        base.FixedUpdateState(fixedDeltaTime);
         HandleRotation();
         HandleHorizontalMomentum();
+        player.Move();
     }
 }

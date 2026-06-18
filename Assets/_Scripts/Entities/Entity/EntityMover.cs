@@ -4,13 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class EntityMover : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private Collider2D col;
-    private bool IsGrounded;
-    private bool IsHeadBump;
-    [SerializeField] private float colliderHeight;
-    [SerializeField] private float offSet;
-    [SerializeField] private LayerMask groundLayerMask;
+    protected Rigidbody2D rb;
+    protected Collider2D col;
+    protected bool IsGrounded;
+    protected bool IsHeadBump;
+    [SerializeField] protected Vector2 colliderSize;
+    [SerializeField] protected float offSet;
+    [SerializeField] protected LayerMask groundLayerMask;
     public void Awake()
     {
         rb=GetComponent<Rigidbody2D>();
@@ -22,29 +22,29 @@ public class EntityMover : MonoBehaviour
         rb.linearVelocity=velocity;
     }
 
-    public bool CheckGround()
+    public virtual bool CheckGround()
     {
-       IsGrounded=Physics2D.Raycast(transform.position+offSet*Vector3.up,Vector2.down,colliderHeight*0.5f+0.01f,groundLayerMask);
+       IsGrounded=Physics2D.Raycast(transform.position+offSet*Vector3.up,Vector2.down,colliderSize.y*0.5f+0.01f,groundLayerMask);
         if (IsGrounded)
         {
-            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.down*(colliderHeight*0.5f+0.01f),Color.green,Time.deltaTime);
+            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.down*(colliderSize.y*0.5f+0.01f),Color.green,Time.deltaTime);
         }
         else
         {
-            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.down*(colliderHeight*0.5f+0.01f),Color.red,Time.deltaTime);
+            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.down*(colliderSize.y*0.5f+0.01f),Color.red,Time.deltaTime);
         }
         return IsGrounded;
     }
-    public bool CheckforHeadBump()
+    public virtual bool CheckforHeadBump()
     {
-       IsHeadBump=Physics2D.Raycast(transform.position+offSet*Vector3.up,Vector2.up,colliderHeight*0.5f+0.01f,groundLayerMask);
+       IsHeadBump=Physics2D.Raycast(transform.position+offSet*Vector3.up,Vector2.up,colliderSize.y*0.5f+0.01f,groundLayerMask);
         if (IsHeadBump)
         {
-            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.up*(colliderHeight*0.5f+0.01f),Color.green,Time.deltaTime);
+            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.up*(colliderSize.y*0.5f+0.01f),Color.green,Time.deltaTime);
         }
         else
         {
-            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.up*(colliderHeight*0.5f+0.01f),Color.red,Time.deltaTime);
+            Debug.DrawRay(transform.position+offSet*Vector3.up,Vector2.up*(colliderSize.y*0.5f+0.01f),Color.red,Time.deltaTime);
         }
         return IsHeadBump;
     }

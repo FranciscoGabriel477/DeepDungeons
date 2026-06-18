@@ -5,6 +5,12 @@ public class PlayerHitBox : MonoBehaviour,IHitable
 {
     private Collider2D playerHitBox;
     public EventHandler<HitInfo> OnHit;
+    public EventHandler<CooldownRecovery> OnAxeTaked;
+
+    public class CooldownRecovery
+    {
+        public float colldownRecovery;
+    }
     private void Awake()
     {
         playerHitBox=GetComponent<Collider2D>();
@@ -12,7 +18,6 @@ public class PlayerHitBox : MonoBehaviour,IHitable
 
     public void GetHit(HitInfo hitInfo)
     {
-        Debug.Log("Ai");
         OnHit?.Invoke(this,hitInfo);
     }
     public void HandleHitBox(bool isinvencible)
@@ -39,5 +44,10 @@ public class PlayerHitBox : MonoBehaviour,IHitable
     {
         playerHitBox.enabled=false;
         playerHitBox=null;
+    }
+
+    public void GetAxe(float cooldownReduce)
+    {
+        OnAxeTaked?.Invoke(this,new CooldownRecovery{colldownRecovery=cooldownReduce});
     }
 }

@@ -68,7 +68,14 @@ public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J>
         Debug.DrawRay(wardPosition+Vector3.right*stats.baseStats.patrolRange,Vector3.up*maxDistanceX*2,Color.yellow);
         Debug.DrawRay(wardPosition-Vector3.right*stats.baseStats.patrolRange,Vector3.up*maxDistanceX*2,Color.yellow);
     }
-    protected override void HandleExternalForces()
+
+    protected virtual void OnDrawGizmos()
+    {
+        Gizmos.color=Color.red;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero,Vector3.right*maxDistanceX*2+Vector3.up*maxDistanceY*2);
+    }
+    public override void HandleExternalForces()
     {
         externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,stats.baseMoveStats.knockBackDecelaration*Time.fixedDeltaTime);
         if((transform.position.x>=wardPosition.x+maxDistanceX && externalForce.x>0) || (transform.position.x<=wardPosition.x-maxDistanceX && externalForce.x < 0))
@@ -108,7 +115,7 @@ public abstract class EnemyController<T,V,S,F,H,J> : EntityController<T,V,S,H,J>
         {
             enemyStateMachine.SwitchState("Hurt");
         }
-        visual.StartFlahshing(0.1f,0.5f);
+        visual.StartFlahshing(0.05f,0.2f);
         
     }
 }

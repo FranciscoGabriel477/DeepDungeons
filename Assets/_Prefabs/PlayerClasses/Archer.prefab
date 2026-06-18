@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 443688813452124353}
   - component: {fileID: 3384189174261569714}
-  - component: {fileID: 4914481002023991486}
   - component: {fileID: 8366649397592264678}
   - component: {fileID: 7036998632446555319}
   - component: {fileID: 7859523145683392211}
   - component: {fileID: 2285012172873795124}
+  - component: {fileID: 1239380570441759939}
   m_Layer: 6
   m_Name: Archer
   m_TagString: Untagged
@@ -77,43 +77,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.225}
   m_Size: {x: 0.5, y: 1.5}
   m_Direction: 0
---- !u!70 &4914481002023991486
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3504745924947759068}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: be54980cd8a1c44478035f086c606d4f, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 1015
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.225}
-  m_Size: {x: 0.5, y: 1.5}
-  m_Direction: 0
 --- !u!50 &8366649397592264678
 Rigidbody2D:
   serializedVersion: 5
@@ -154,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
   colliderHeight: 1.53
+  colliderSize: {x: 0.5, y: 1.53}
   offSet: 0.225
   groundLayerMask:
     serializedVersion: 2
@@ -178,10 +142,9 @@ MonoBehaviour:
   externalForce: {x: 0, y: 0}
   isFacingRight: 0
   playerHitBox: {fileID: 0}
+  timers: {fileID: 0}
   skillSlot1: ToxicArrow
   skillSlot2: 
-  currentSkill1Cooldown: 0
-  currentSkill2Cooldown: 0
   currentSkillPressed: 0
   checkPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &2285012172873795124
@@ -198,8 +161,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   baseStats: {fileID: 11400000, guid: 71303f090ab702b4aab5933417c16b82, type: 2}
   baseMoveStats: {fileID: 11400000, guid: d5d942b4bc12460448652cecdc9f143f, type: 2}
+  currentLife: 0
   experienceToUp: 0
   currentExperience: 0
+--- !u!114 &1239380570441759939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3504745924947759068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36be28b1ae0e9ec4caca6279f1248684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCooldowns
+  currentSkill1Cooldown: 0
+  currentSkill2Cooldown: 0
+  totalSkill1Cooldown: 0
+  totalSkill2Cooldown: 0
 --- !u!1 &4112552673607559410
 GameObject:
   m_ObjectHideFlags: 0

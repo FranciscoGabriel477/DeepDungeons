@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 [RequireComponent(typeof(PlayerMover))]
 
 [RequireComponent(typeof(PlayerStats))]
+[RequireComponent(typeof(PlayerCooldowns))]
 public class PlayerController : EntityController<PlayerMover,PlayerCharacterClassVisual,PlayerStats,PlayerBaseStats,PlayerBaseMoveStats>
 {
     [HideInInspector] public PlayerCharacterClass characterClass{get; private set;}  
@@ -14,14 +16,23 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     [HideInInspector] public PlayerHitBox playerHitBox;
     public bool jumpIsPressed{get; private set;}
     public bool jumpIsHelded{get; private set;}
-    public float currentTimerJumpBuffer{get; private set;}
-    public float currentTimerDashCoolDown{get; private set;}
-    public float currentTimerBlockCoolDown{get; private set;}
-    public float currentInvencibilityTime{get; private set;}
+    
+    public PlayerCooldowns timers;
+    public EventHandler<CooldownCount> OnSkill1EnterCooldown;
+    public EventHandler<CooldownCount> OnSkill2EnterCooldown;
+    public EventHandler<CooldownCount> OnSkill1CooldownReduced;
+    public EventHandler<CooldownCount> OnSkill2CooldownReduced;
+    public EventHandler<CooldownCount> OnDashEnterCooldown;
+    public EventHandler<CooldownCount> OnBlockEnterCooldown;
+    public EventHandler<CooldownCount> OnInvencibilityTimeStart;
+    public EventHandler<CooldownCount> OnJumpBufferStart;
+    public EventHandler<CooldownCount> OnCoyoteTimeStart;
+    public class CooldownCount : EventArgs
+    {
+        public float cooldown;
+    }
     public string skillSlot1;
     public string skillSlot2;
-    public float currentSkill1Cooldown;
-    public float currentSkill2Cooldown;
     public int currentSkillPressed;
     public Vector3 checkPoint;
     protected override void Awake()
@@ -29,6 +40,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         base.Awake();
         characterClass=GetComponentInChildren<PlayerCharacterClass>();
         playerHitBox=GetComponentInChildren<PlayerHitBox>();
+        timers=GetComponent<PlayerCooldowns>();
         GameManager.instance.player=this;       // TIRE ISSO DEPOISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs
     }
 
@@ -36,17 +48,36 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     {
         base.Start();
         isFacingRight=true;
-        currentTimerJumpBuffer=0;
-        currentTimerDashCoolDown=0;
-        currentTimerBlockCoolDown=0;
-        currentInvencibilityTime=0;
-        currentSkill1Cooldown=0;
-        currentSkill2Cooldown=0;
         SetupGameInput();
         SetupStateMachine();
+        SetupTimers();
         playerHitBox.OnHit+=Hitted;
         //HUDManager.instance.OnSkillSelected+=GetNewSkill;
         stats.OnDeath+=Dead;
+
+    }
+    private void SetupTimers()
+    {
+        OnInvencibilityTimeStart+=timers.InvencibilityTimeStart;
+        OnBlockEnterCooldown+=timers.BlockCooldownStart;
+        OnDashEnterCooldown+=timers.DashCooldownStart;
+        OnSkill1EnterCooldown+=timers.Skill1CooldownStart;
+        OnSkill2EnterCooldown+=timers.Skill2CooldownStart;
+        OnJumpBufferStart+=timers.JumpBufferStart;
+        OnCoyoteTimeStart+=timers.CoyoteTimeStart;
+        OnSkill1CooldownReduced+=timers.Skill1CooldownReduce;
+        OnSkill2CooldownReduced+=timers.Skill2CooldownReduce;
+    }
+    public void Update()
+    {
+        playerStateMachine.Action(Time.deltaTime);
+        playerAirControlStateMachine.Action(Time.deltaTime);
+    }
+
+    public void FixedUpdate()
+    {
+        playerStateMachine.FixedAction(Time.fixedDeltaTime);
+        playerAirControlStateMachine.FixedAction(Time.fixedDeltaTime);
 
     }
 
@@ -57,27 +88,23 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         playerStateMachine.OnStateChanged += visual.MainStateChanged;
         playerAirControlStateMachine.OnStateChanged += visual.AirStateChanged;
     }
-    public void Update()
-    {
-        CountTimers();
-        GetInputMoveDir();
-        HandleEffects();
-        playerHitBox.HandleHitBox(playerStateMachine.currentState.invencible || currentInvencibilityTime>0);
-        playerStateMachine.Action(Time.deltaTime);
-        playerAirControlStateMachine.Action(Time.deltaTime);
-    }
 
-    public void FixedUpdate()
+    public void CheckGround()
     {
-        HandleExternalForces();
+        bool pastGroundState=IsGrounded;
         IsGrounded=mover.CheckGround();
+        if(!IsGrounded && pastGroundState)
+        {
+            OnCoyoteTimeStart?.Invoke(this, new CooldownCount{cooldown=stats.baseMoveStats.coyoteTime});
+        }
+        else if(IsGrounded && !pastGroundState)
+        {
+            ResetCoyoteTime();
+        }
         IsHeadBump=mover.CheckforHeadBump();
-        playerStateMachine.FixedAction(Time.fixedDeltaTime);
-        playerAirControlStateMachine.FixedAction(Time.fixedDeltaTime);
-        Move();
     }
 
-    protected override void HandleExternalForces()
+    public override void HandleExternalForces()
     {
         externalForce=Vector2.MoveTowards(externalForce,Vector2.zero,stats.baseMoveStats.knockBackDecelaration*Time.fixedDeltaTime);
     }
@@ -85,39 +112,25 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     {
         DisabelGameInput();
     }
-    private void CountTimers()
-    {
-        currentTimerJumpBuffer=Math.Max(0,currentTimerJumpBuffer-Time.deltaTime);
-        currentTimerDashCoolDown=Math.Max(0,currentTimerDashCoolDown-Time.deltaTime);
-        currentTimerBlockCoolDown=Math.Max(0,currentTimerBlockCoolDown-Time.deltaTime);
-        currentInvencibilityTime=Math.Max(0,currentInvencibilityTime-Time.deltaTime);
-        currentSkill1Cooldown=Math.Max(0,currentSkill1Cooldown-Time.deltaTime);
-        currentSkill2Cooldown=Math.Max(0,currentSkill2Cooldown-Time.deltaTime);
-        if (skillSlot1 != "")
-        {
-            HUDManager.instance.skillSlot1Cooldown.fillAmount=currentSkill1Cooldown/characterClass.skillS[skillSlot1].cooldown;
-        }
-        if (skillSlot2 != "")
-        {
-            HUDManager.instance.skillSlot2Cooldown.fillAmount=currentSkill2Cooldown/characterClass.skillS[skillSlot2].cooldown;
-        }
-        
-    }
     public void ResetJumpBuffer()
     {
-        currentTimerJumpBuffer=0;
+        OnJumpBufferStart?.Invoke(this,new CooldownCount{cooldown=0});
     }
-    public void ResetDashCooldown()
+    public void ResetCoyoteTime()
     {
-        currentTimerDashCoolDown=stats.baseMoveStats.dashCooldown;
+        OnCoyoteTimeStart?.Invoke(this, new CooldownCount{cooldown=0});
     }
     public void ResetBlockCooldown()
     {
-        currentTimerBlockCoolDown=stats.baseStats.blockCooldown;
+        OnBlockEnterCooldown?.Invoke(this, new CooldownCount{cooldown=stats.baseStats.blockCooldown});
+    }
+    public void ResetDashCooldown()
+    {
+        OnDashEnterCooldown?.Invoke(this, new CooldownCount{cooldown=stats.baseMoveStats.dashCooldown});
     }
     public bool CheckJumpConditions()
     {
-        return currentTimerJumpBuffer>0f && IsGrounded && playerStateMachine.AllowsJump();
+        return timers.InJumpBuffer() && (IsGrounded || timers.InCoyoteTime()) && playerStateMachine.AllowsJump();
     }
     public void Move()
     {
@@ -153,7 +166,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         {
             return;
         }
-        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && currentSkill1Cooldown<=0)
+        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && !timers.Skill1InCooldown())
         {
             playerStateMachine.SwitchState(PlayerStateName.SkillCast);
         }
@@ -165,7 +178,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         {
             return;
         }
-        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && currentSkill2Cooldown<=0)
+        if (playerStateMachine.GetState(PlayerStateName.SkillCast).CheckTrasitionConditions() && !timers.Skill2InCooldown())
         {
             playerStateMachine.SwitchState(PlayerStateName.SkillCast);
         }
@@ -215,7 +228,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     }
     public void JumpPressed(object sender, EventArgs e)
     {
-        currentTimerJumpBuffer=stats.baseMoveStats.jumpBufferTimer;   
+        OnJumpBufferStart?.Invoke(this,new CooldownCount{cooldown=stats.baseMoveStats.jumpBufferTimer});   
         jumpIsHelded=false;
         jumpIsPressed=true;
     }
@@ -239,8 +252,8 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
         gameInput.OnAttackPressed+=AttackPressed;
         gameInput.OnSkill1Pressed+=Skill1Pressed;
         gameInput.OnSkill2Pressed+=Skill2Pressed;
-        gameInput.OnDashPressed+=DashPressed;
         gameInput.OnBlockPressed+=BlockPressed;
+        gameInput.OnDashPressed+=DashPressed;
         moveDir=gameInput.GetNormalizedMovementInput(); 
     }
 
@@ -257,6 +270,10 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
 
     public void Hitted(object sender,HitInfo hitInfo)
     {
+        if (playerStateMachine.GetActualStateName() == PlayerStateName.Death)
+        {
+            return;
+        }
         if (playerStateMachine.GetActualStateName() == PlayerStateName.Block)
         {
             BlockPlayerState blockPlayerState=playerStateMachine.GetState(PlayerStateName.Block) as BlockPlayerState;
@@ -269,7 +286,7 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
             }
         }
         base.GetHit(hitInfo);
-        currentInvencibilityTime=stats.baseStats.invencibilityTime;
+        OnInvencibilityTimeStart?.Invoke(this, new CooldownCount{cooldown=stats.baseStats.invencibilityTime});
         stats.TakeDamage(hitInfo.damage);
         playerStateMachine.SwitchState(PlayerStateName.Hurt);
         visual.StartFlahshing(stats.baseStats.flashingInterval,stats.baseStats.invencibilityTime);
@@ -277,8 +294,12 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
 
     public void HittedByTrap()
     {
+        if (playerStateMachine.GetActualStateName() == PlayerStateName.Death)
+        {
+            return;
+        }
         ReturnToCheckPoint();
-        currentInvencibilityTime=stats.baseStats.invencibilityTime;
+        OnInvencibilityTimeStart?.Invoke(this, new CooldownCount{cooldown=stats.baseStats.invencibilityTime});
         stats.TakeTrapDamage();
         visual.StartFlahshing(stats.baseStats.flashingInterval,stats.baseStats.invencibilityTime);
     }
@@ -296,9 +317,14 @@ public class PlayerController : EntityController<PlayerMover,PlayerCharacterClas
     public void Dead(object sender, EventArgs e)
     {
         playerStateMachine.SwitchState(PlayerStateName.Death);
+        
         DestroyPlayerHitBoxes();
-        GameManager.instance.GameOver();
+        visual.enabled=false;
+        mover.enabled=false;
+        stats.enabled=false;
+        characterClass.enabled=false;
         enabled=false;
+        GameManager.instance.GameOver();
     }
 
     private void DestroyPlayerHitBoxes()

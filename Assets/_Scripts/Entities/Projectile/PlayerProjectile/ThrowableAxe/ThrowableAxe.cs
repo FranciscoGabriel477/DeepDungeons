@@ -21,14 +21,6 @@ public class ThrowableAxe : MonoBehaviour
         returnBack=false;
         readyToTake=false;
     }
-    void Start()
-    {
-        
-    }
-    void Update()
-    {
-        
-    }
 
     private void FixedUpdate()
     {
@@ -66,14 +58,8 @@ public class ThrowableAxe : MonoBehaviour
             }
             else if(collision.gameObject.layer == tAxeInfo.playerLayer && readyToTake)
             {
-                PlayerController player= collision.gameObject.GetComponent<PlayerController>();
-                if (player.skillSlot1 == SoldierSkillName.ThrowAxe){
-                    player.currentSkill1Cooldown-=tAxeInfo.cooldownReduce;
-                }
-                else if(player.skillSlot2 == SoldierSkillName.ThrowAxe)
-                {
-                    player.currentSkill2Cooldown-=tAxeInfo.cooldownReduce;
-                }
+                PlayerHitBox playerHitBox= collision.gameObject.GetComponent<PlayerHitBox>();
+                playerHitBox.GetAxe(tAxeInfo.cooldownReduce);
                 Destroy(gameObject);
             }
             

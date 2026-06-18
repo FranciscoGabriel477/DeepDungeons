@@ -18,11 +18,13 @@ public class BlockPlayerState : PlayerState
 
     public override void UpdateState(float deltaTime)
     {
-        
+        base.UpdateState(deltaTime);
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {
+        base.FixedUpdateState(fixedDeltaTime);
         HandleRotation();
+        player.Move();
     }
     public override void ExitState()
     {
@@ -36,7 +38,7 @@ public class BlockPlayerState : PlayerState
     }
     public override bool CheckTrasitionConditions()
     {
-        return player.IsGrounded && parent.AllowsTransition(PlayerStateName.Block) && player.currentTimerBlockCoolDown==0;
+        return player.IsGrounded && parent.AllowsTransition(PlayerStateName.Block) && !player.timers.BlockInCooldown();
     }
 
     public void BlockRealeased(object sender, EventArgs e)

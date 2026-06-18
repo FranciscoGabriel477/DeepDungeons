@@ -8,7 +8,7 @@ public class EntityStats<T,Y> : MonoBehaviour where T: EntityBaseStats where Y: 
     public T baseStats;
     public Y baseMoveStats;
     public float currentMaxLife{get; protected set;}
-    public float currentLife{get; protected set;}
+    public float currentLife;
     public float currentSpeed{get; protected set;}   
     protected virtual void Start()
     {

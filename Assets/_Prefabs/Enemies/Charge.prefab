@@ -266,10 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d677617e4688f44984f8f8afbe142ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChargeWeapon
+  weaponInfo: {fileID: 11400000, guid: f9607f0cda9f4064a911c8da473372be, type: 2}
   weaponColliders:
   - {fileID: 21832105298457483}
   - {fileID: 7850764707909985240}
-  weaponInfo: {fileID: 11400000, guid: 4b42f74415ee7034ca2f54a0f08d8d89, type: 2}
   contactFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -605,6 +605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChargeMover
   colliderHeight: 2
+  colliderSize: {x: 1.5, y: 2}
   offSet: 0.2
   groundLayerMask:
     serializedVersion: 2
@@ -623,6 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChargeStats
   baseStats: {fileID: 11400000, guid: 3c2fecddb580df44a9bad42b3a8dbb8a, type: 2}
   baseMoveStats: {fileID: 11400000, guid: a393ab78b264fab4da9fce522d880d5f, type: 2}
+  currentLife: 0
   lifeBar: {fileID: 1479783778670000645}
   localHUD: {fileID: 4072493225792665832}
   currentStance: 0

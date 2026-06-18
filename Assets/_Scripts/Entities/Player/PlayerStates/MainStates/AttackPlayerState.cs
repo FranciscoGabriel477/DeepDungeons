@@ -18,6 +18,15 @@ public class AttackPlayerState : PlayerState
         player.stats.ConsumeStamina(player.characterClass.GetStaminaAttackCost());
     }
 
+    public override void UpdateState(float deltaTime)
+    {
+        base.UpdateState(deltaTime);
+    }
+    public override void FixedUpdateState(float fixedDeltaTime)
+    {
+        base.FixedUpdateState(fixedDeltaTime);
+        player.Move();
+    }
     private void CheckEndOfAttack(object sender, StateMachine<ClassAttackState>.StateChangeInfo e)
     {
         if (e.newState.stateName == PlayerStateName.NotAttacking)

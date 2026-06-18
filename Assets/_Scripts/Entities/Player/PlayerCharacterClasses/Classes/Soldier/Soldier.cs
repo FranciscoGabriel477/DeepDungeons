@@ -2,19 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
 public class SoldierClass : PlayerCharacterClass
 {
     public SoldierWeaponInfo weaponInfo;
-    public ContactFilter2D contactFilter;
     public SoldierVisual soldierVisual;
-    public Collider2D weaponCollider{get; protected set;}
     public ChargeCutInfo chargeCutInfo;
     public ThrowAxeInfo throwAxeInfo;
 
     private void Awake()
     {
-        weaponCollider=GetComponent<Collider2D>();
         SetupSkillsDictionary();
     }
 
@@ -22,6 +18,7 @@ public class SoldierClass : PlayerCharacterClass
     {
         SetupAttacckStateMachine();
         SetupSkillStateMachine();
+        playerController.playerHitBox.OnAxeTaked+=AxeRecovery;
     }
     protected override void Update()
     {
@@ -73,5 +70,23 @@ public class SoldierClass : PlayerCharacterClass
             { chargeCutInfo.skillName, chargeCutInfo },
             { throwAxeInfo.skillName, throwAxeInfo   }
         };
+    }
+
+    protected void AxeRecovery(object sender, PlayerHitBox.CooldownRecovery recovery)
+    {
+        if (playerController.skillSlot1 == SoldierSkillName.ThrowAxe){
+            playerController.OnSkill1CooldownReduced?.Invoke(playerController, new PlayerController.CooldownCount{cooldown=recovery.colldownRecovery});
+        }
+        else if(playerController.skillSlot2 == SoldierSkillName.ThrowAxe)
+        {
+            playerController.OnSkill2CooldownReduced?.Invoke(playerController, new PlayerController.CooldownCount{cooldown=recovery.colldownRecovery});
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color=Color.green;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(weaponInfo.attackMeele1OffSet,weaponInfo.attackMeele1Size);
     }
 }

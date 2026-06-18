@@ -21,7 +21,7 @@ public class AttackBeeState : BeeState
     public override void UpdateState(float deltaTime)
     {
         actualTime-=deltaTime;
-        if (enemy.IsGrounded || enemy.IsHeadBump)
+        if (enemy.IsGrounded)
         {
             parent.SwitchState(BeeStateName.Cooling);
             return;

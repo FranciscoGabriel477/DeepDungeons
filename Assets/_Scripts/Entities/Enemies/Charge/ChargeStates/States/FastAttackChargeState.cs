@@ -41,15 +41,29 @@ public class FastAttackChargeState : ChargeState
         base.ExitState();
         charge.visual.OnInitiateOfFastAttackAnimation-=InitiateOfFastAttackAnimation;
         enemy.attacksCooldowns[numberOfAttackInList]=enemy.stats.baseStats.attackDatas[numberOfAttackInList].cooldown;
-        enemy.chargeWeapon.DisableWeapon(numberOfAttackInList);
     }
     protected void InitiateOfFastAttackAnimation(object sender, EventArgs e)
     {
-        enemy.chargeWeapon.EnableWeapon(numberOfAttackInList);
+        Attack(charge.transform.rotation.eulerAngles.y);
     }
 
     protected override void HandleMoveDir()
     {
         enemy.moveDir=Vector3.Normalize(enemy.GetPlayerPos()-enemy.transform.position);
+    }
+    public virtual void Attack(float dir)
+    {
+        Vector2 offset=dir==0?charge.chargeWeapon.weaponInfo.fastAttackOffSet:-charge.chargeWeapon.weaponInfo.fastAttackOffSet;
+        offset.y=charge.chargeWeapon.weaponInfo.fastAttackOffSet.y;
+        Vector2 attackCenter=(Vector2)charge.transform.position+offset;
+        Collider2D[] enemiesHitted=Physics2D.OverlapBoxAll(attackCenter,charge.chargeWeapon.weaponInfo.fastAttackSize,dir,charge.chargeWeapon.weaponInfo.enemyLayer);
+        foreach(Collider2D enemyHitted in enemiesHitted){
+            Vector2 KnockBackDir=charge.transform.position.x-enemyHitted.transform.position.x<0?Vector2.right:Vector2.left;
+            enemyHitted.gameObject.TryGetComponent<IHitable>(out IHitable enemy);
+            if(enemy != null)
+            {
+                enemy.GetHit(new HitInfo{damage=charge.chargeWeapon.weaponInfo.damage, knockBack=KnockBackDir*charge.chargeWeapon.weaponInfo.knockBackImpulse,posOrigin=charge.transform.position});
+            }
+        }
     }
 }

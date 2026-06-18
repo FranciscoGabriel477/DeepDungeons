@@ -11,6 +11,11 @@ public class FallPlayerState : PlayerAirState
             parent.SwitchState(PlayerAirStateName.NotInAir);
             return;
         }
+        if (player.CheckJumpConditions())
+        {
+            parent.SwitchState(PlayerAirStateName.Jump);
+            return;
+        }
     }
     public override void FixedUpdateState(float fixedDeltaTime)
     {

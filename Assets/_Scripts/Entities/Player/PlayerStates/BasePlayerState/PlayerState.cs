@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class PlayerState : State<PlayerState>
 {
@@ -16,6 +17,25 @@ public class PlayerState : State<PlayerState>
     protected virtual void HandleHorizontalMomentum() 
     {
         player.SetHorizontalFrameVelocity(player.moveDir.x*player.stats.currentSpeed);
+    }
+    public override void EntryState()
+    {
+        
+    }
+    public override void UpdateState(float deltaTime)
+    {
+        player.GetInputMoveDir();
+        player.HandleEffects();
+        player.playerHitBox.HandleHitBox(parent.currentState.invencible || player.timers.InInvencibilityTime());
+    }
+    public override void FixedUpdateState(float fixedDeltaTime)
+    {
+        player.HandleExternalForces();
+        player.CheckGround();
+    }
+    public override void ExitState()
+    {
+        
     }
     
     protected virtual void HandleRotation()
